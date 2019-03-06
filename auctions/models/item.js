@@ -4,6 +4,7 @@ module.exports = (sequelize, DataTypes) => {
     "Item",
     {
       id: { type: DataTypes.BIGINT, primaryKey: true },
+      name: DataTypes.STRING,
       properties: DataTypes.JSON
     },
     {}

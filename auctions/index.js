@@ -10,7 +10,7 @@ require("./util/yyyymmdd")();
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-// app.use("/api/v1/auctions", auctions);
+app.use("/api/v1/auctions", auctions);
 
 // getCurrentlyAvailData();
 
@@ -19,6 +19,6 @@ app.use(bodyParser.urlencoded({ extended: true }));
 //   getCurrentlyAvailData();
 // });
 
-// app.listen("3000", () => {
-//   console.log("Listening in port 3000.");
-// });
+app.listen("3000", () => {
+  console.log("Listening in port 3000.");
+});

@@ -7,7 +7,7 @@ import {
 const initialState = {
   loading: false,
   error: null,
-  auctions: []
+  auctions: ["I'm an auction"]
 };
 
 export default function Auction(state = initialState, action) {
@@ -21,7 +21,7 @@ export default function Auction(state = initialState, action) {
       return {
         ...state,
         loading: false,
-        auctions: [...state.auctions, payload]
+        auctions: payload
       };
     default:
       return state;

@@ -32,12 +32,13 @@ module.exports = async function() {
       .get("https://www.raidbots.com/static/data/live/equippable-items.json")
       .then(result => {
         result.data.map(item => {
-          const { id, ...rest } = item;
-          db.Item.create({ id, properties: rest });
+          const { id, name, ...rest } = item;
+          db.Item.create({ id, name, properties: rest });
           //   items.push({ id: id, properties: rest });
         });
         // db.Item.bulkCreate(items).catch(err => console.log(err));
         // console.log(items);
+        console.log("Done getting fetching and saving");
       })
       .catch(err => console.log(err));
   };
