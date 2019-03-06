@@ -2,6 +2,7 @@ const express = require("express");
 const schedule = require("node-schedule");
 const app = express();
 const getCurrentlyAvailData = require("./util/getCurrentlyAvailableData");
+const getAllItems = require("./util/getAllItems");
 const bodyParser = require("body-parser");
 const auctions = require("./routes/v1/auctions");
 const db = require("./models");
@@ -21,12 +22,3 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // app.listen("3000", () => {
 //   console.log("Listening in port 3000.");
 // });
-
-// db.Auction.findAll()
-//   .then(result => {
-//     // console.log(result);
-//     result.map(item => {
-//       console.log(item);
-//     });
-//   })
-//   .catch(err => console.log(err));
