@@ -12,7 +12,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use("/api/v1/auctions", auctions);
 
-// getCurrentlyAvailData();
+getCurrentlyAvailData();
 
 // schedule.scheduleJob("* /5 * * * *", function() {
 //   console.log("Scheduler running");

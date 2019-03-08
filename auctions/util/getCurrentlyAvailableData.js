@@ -1,6 +1,7 @@
 const axios = require("axios");
 const db = require("../models");
 const getCreds = require("./getCredentials");
+const getLatestTimestamp = require("./getLatestTimestamp");
 
 module.exports = async function() {
   let prevUpdate;
@@ -59,7 +60,7 @@ module.exports = async function() {
                 {
                   include: [{ model: db.Modifier }, { model: db.BonusList }]
                 }
-              );
+              ).catch(err => console.log(err));
             }
             if (modifiers && !bonusLists) {
               db.Auction.create(
@@ -86,7 +87,7 @@ module.exports = async function() {
                 {
                   include: [{ model: db.Modifier }]
                 }
-              );
+              ).catch(err => console.log(err));
             }
             if (!modifiers && bonusLists) {
               db.Auction.create(
@@ -113,7 +114,7 @@ module.exports = async function() {
                 {
                   include: [{ model: db.BonusList }]
                 }
-              );
+              ).catch(err => console.log(err));
             }
             if (!modifiers && !bonusLists) {
               db.Auction.create({
@@ -134,7 +135,7 @@ module.exports = async function() {
                 petBreedId: petBreedId,
                 petLevel: petLevel,
                 petQualityId: petQualityId
-              });
+              }).catch(err => console.log(err));
             }
           });
         })
@@ -146,32 +147,22 @@ module.exports = async function() {
     }
   };
 
-  // get UNIX timestamp of previous update from database
-  getDb = async () => {
-    await db.sequelize
-      .query("SELECT MAX(batchTimeId) FROM Auctions", {
-        type: db.sequelize.QueryTypes.SELECT
-      })
-      .then(result => {
-        prevUpdate = result[0]["MAX(batchTimeId)"];
-        console.log(result[0]["MAX(batchTimeId)"]);
-      })
-      .catch(err => console.log(err));
-  };
-
   getCreds()
     .then(async () => {
       let fetchUrl = `https://eu.api.blizzard.com/wow/auction/data/auchindoun?locale=en_US&access_token=${
         process.env.access_token
       }`;
-      let responseUrl = null;
+      let responseUrl;
       let sourceLastUpdate;
 
       await db.Auction.sync();
       await db.Modifier.sync();
       await db.BonusList.sync();
-      console.log("before GetDb");
-      getDb();
+
+      console.log("before getLatestTimestamp");
+      prevUpdate = await getLatestTimestamp();
+      console.log("---");
+      console.log(prevUpdate);
 
       return axios
         .get(fetchUrl)

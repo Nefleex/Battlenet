@@ -4,28 +4,6 @@ const axios = require("axios");
 module.exports = async function() {
   await db.Item.sync();
 
-  //   db.Item.create({
-  //     id: 3,
-  //     properties: { test: "hello", "key 1": { "key inner": {} } }
-  //   });
-
-  saveItems = async () => {
-    await db.Item.bulkCreate([
-      {
-        id: 1,
-        properties: { test: "hello", "key 1": { "key inner": {} } }
-      },
-      {
-        id: 2,
-        properties: { test: "hello", "key 2": { "key inner": {} } }
-      },
-      {
-        id: 3,
-        properties: { test: "hello", "key 3": { "key inner": {} } }
-      }
-    ]);
-  };
-
   getItems = async () => {
     let items = [];
     return await axios
