@@ -1,27 +1,34 @@
 import React, { useEffect } from "react";
-import AuctionList from "./AuctionList";
+import "./styles/Layout.css";
+import Header from "./Header";
+import FeatureBar from "./FeatureBar";
 import { connect } from "react-redux";
-import { receiveAuctions } from "../actions/actionCreators";
+import { withRouter } from "react-router-dom";
 
-const Layout = props => {
-  useEffect(() => {
-    fetch("https://pokeapi.co/api/v2/pokemon?limit=20")
-      .then(data => data.json())
-      .then(data => {
-        console.log(data.results);
-        props.dispatch(receiveAuctions(data.results));
-      })
-      .catch(err => console.log(err));
-  }, []);
+const Layout = ({ history, ...props }) => {
+  // useEffect(() => {
+  //   fetch("https://pokeapi.co/api/v2/pokemon?limit=20")
+  //     .then(data => data.json())
+  //     .then(data => {
+  //       console.log(data.results);
+  //       receiveAuctions(data.results);
+  //     })
+  //     .catch(err => console.log(err));
+  // }, []);
 
-  return <AuctionList auctions={props.auctions} />;
+  return (
+    <div className="layout">
+      <Header />
+      <div className="filler" />
+      <FeatureBar history={history} />
+    </div>
+  );
 };
 
-function mapStateToProps(state) {
-  const { auctions } = state.Auction;
+const mapStateToProps = state => {
   return {
     state: state
   };
-}
+};
 
-export default connect(mapStateToProps)(Layout);
+export default withRouter(connect(mapStateToProps)(Layout));

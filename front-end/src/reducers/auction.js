@@ -1,28 +1,17 @@
-import {
-  LOAD_AUCTIONS,
-  RECEIVE_AUCTIONS,
-  LOAD_AUCTIONS_ERROR
-} from "../actions/actionCreators";
+import { RECEIVE_AUCTIONS, EMPTY_AUCTIONS } from "../actions/actionCreators";
+// import { initialState } from "./index";
 
-const initialState = {
-  loading: false,
-  error: null,
-  auctions: ["I'm an auction"]
-};
-
-export default function Auction(state = initialState, action) {
-  const { payload, type } = action;
+export default function Auction(state = [], action) {
+  const { payload, type, extra } = action;
   switch (type) {
-    case LOAD_AUCTIONS:
-      return { ...state, loading: true };
-    case LOAD_AUCTIONS_ERROR:
-      return { ...state, loading: false, error: payload };
     case RECEIVE_AUCTIONS:
       return {
         ...state,
-        loading: false,
-        auctions: payload
+        auctions: payload,
+        extra
       };
+    case EMPTY_AUCTIONS:
+      return { ...state, auctions: [] };
     default:
       return state;
   }
