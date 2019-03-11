@@ -5,14 +5,16 @@ const getCurrentlyAvailData = require("./util/getCurrentlyAvailableData");
 const getAllItems = require("./util/getAllItems");
 const bodyParser = require("body-parser");
 const auctions = require("./routes/v1/auctions");
+const headers = require("./middleware/headers");
 const db = require("./models");
 require("./util/yyyymmdd")();
 
+app.use(headers);
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use("/api/v1/auctions", auctions);
 
-getCurrentlyAvailData();
+// getCurrentlyAvailData();
 
 // schedule.scheduleJob("* /5 * * * *", function() {
 //   console.log("Scheduler running");
