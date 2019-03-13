@@ -1,6 +1,8 @@
 import React, { Fragment, useState } from "react";
 import { connect } from "react-redux";
 import { getData, emptyAuctions, loading } from "../actions/actionCreators";
+import AuctionTable from "./AuctionTable";
+import "./styles/Auctions.css";
 
 const AuctionList = props => {
   const [selected, setSelected] = useState("Item");
@@ -10,20 +12,18 @@ const AuctionList = props => {
     console.log("Search pressed :" + selected);
     if (selected === "Item") {
       emptyAuctions();
-      loading();
       getData(selected, searchField);
     } else if (selected === "Owner") {
       emptyAuctions();
-      loading();
       getData(selected, searchField);
     }
   };
   //Destructuring props
   const {
     auctions: { auctions, extra },
-    loadStatus: { error },
+    loadStatus: { error, loading },
     emptyAuctions,
-    loading,
+
     getData
   } = props;
 
@@ -66,64 +66,17 @@ const AuctionList = props => {
         })}
       </ul> */}
       <button onClick={() => console.log(auctions)}>Auctions test</button>
-      <button onClick={() => console.log(error)}>Error</button>
+      <button onClick={() => console.log(loading)}>Loading</button>
       <hr />
       <Error error={error} />
-      <Table selected={selected} auctions={auctions} searchMode={extra} />
+      <AuctionTable
+        selected={selected}
+        auctions={auctions}
+        target={extra}
+        loading={loading}
+      />
     </Fragment>
   );
-};
-
-const Table = ({ selected, auctions, searchMode }) => {
-  switch (selected) {
-    case "Item":
-      return (
-        <Fragment>
-          <div>Item selected</div>
-          <button onClick={() => console.log(auctions + searchMode)}>
-            Table Props
-          </button>
-          {auctions && (
-            <div className="column-names">
-              <div>Quantity</div>
-              <div>Buyout</div>
-            </div>
-          )}
-          {auctions &&
-            auctions.map((auction, i) => {
-              return (
-                <Fragment key={i}>
-                  <div
-                    className="item-row"
-                    key={i}
-                    styles={{
-                      display: "grid",
-                      gridTemplateColumns: "repeat(2, 1fr)"
-                    }}
-                  >
-                    <div className="quantity" styles={{}}>
-                      {auction.quantity}
-                    </div>
-                    <div className="buyout" styles={{}}>
-                      {auction.buyout}
-                    </div>
-                  </div>
-                  <hr />
-                </Fragment>
-              );
-            })}
-        </Fragment>
-      );
-    case "Owner":
-      return (
-        <Fragment>
-          <div>Owner selected</div>
-          <button onClick={() => console.log(selected)}>Table Props</button>
-        </Fragment>
-      );
-    default:
-      return <div>Oopsie! Something went wrong</div>;
-  }
 };
 
 const Error = ({ error }) => {
@@ -139,5 +92,5 @@ function mapStateToProps(state) {
 }
 export default connect(
   mapStateToProps,
-  { getData, emptyAuctions, loading }
+  { getData, emptyAuctions }
 )(AuctionList);
