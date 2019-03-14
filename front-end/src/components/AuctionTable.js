@@ -8,17 +8,26 @@ const AuctionTable = ({
   loading,
   sortActions
 }) => {
+  const [sorting, setSorting] = useState({
+    quantity: "ASC",
+    buyout: "ASC",
+    unitPrice: "ASC"
+  });
   const toGoldSilverCopper = val => {
     const coppers = val.slice(val.length - 2) + "c";
     const silvers = val.slice(val.length - 4, val.length - 2) + "s";
     const golds = (val / 10000).toFixed(0) + "g";
     return golds + silvers + coppers;
   };
-  const [sorting, setSorting] = useState({
-    quantity: "ASC",
-    buyout: "ASC",
-    unitPrice: "ASC"
-  });
+
+  const handleSorting = key => {
+    console.log(key);
+    console.log(sorting[key]);
+    sortActions(key, sorting[key]);
+    sorting[key] === "ASC"
+      ? setSorting({ ...sorting, [key]: "DESC" })
+      : setSorting({ ...sorting, [key]: "ASC" });
+  };
 
   switch (displayMode) {
     case "Item":
@@ -37,18 +46,36 @@ const AuctionTable = ({
               <div className="sort-by">
                 <button
                   name="quantity"
-                  onClick={() => {
-                    sortActions("quantity", sorting.quantity);
-                    sorting.quantity === "ASC"
-                      ? setSorting({ ...sorting, quantity: "DESC" })
-                      : setSorting({ ...sorting, quantity: "ASC" });
+                  onClick={e => {
+                    handleSorting(e.target.name);
                   }}
                 >
                   Quantity
                 </button>
-                <button name="buyout">Buyout</button>
-                <button name="buyout">Buyout</button>
-                <button name="unitPrice">Unit Cost</button>
+                <button
+                  name="buyout"
+                  onClick={e => {
+                    handleSorting(e.target.name);
+                  }}
+                >
+                  Buyout
+                </button>
+                <button
+                  name="buyout"
+                  onClick={e => {
+                    handleSorting(e.target.name);
+                  }}
+                >
+                  Buyout
+                </button>
+                <button
+                  name="unitPrice"
+                  onClick={e => {
+                    handleSorting(e.target.name);
+                  }}
+                >
+                  Unit Cost
+                </button>
               </div>
             </Fragment>
           )}
@@ -62,7 +89,7 @@ const AuctionTable = ({
                 <Fragment key={i}>
                   <div className="item-row" key={i}>
                     <div className="quantity">{quantity}</div>
-                    <div className="total">{buyout}</div>
+                    <div className="buyout">{buyout}</div>
                     <div className="buyout-gold">{total}</div>
                     <div className="unit-cost">{unit}</div>
                     <button
