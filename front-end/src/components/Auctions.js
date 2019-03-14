@@ -1,19 +1,18 @@
 import React, { Fragment, useState } from "react";
 import { connect } from "react-redux";
-import { getData, emptyAuctions, loading } from "../actions/actionCreators";
+import { getData, emptyAuctions, sortActions } from "../actions/actionCreators";
 import AuctionTable from "./AuctionTable";
 import "./styles/Auctions.css";
 
 const AuctionList = props => {
   const [selected, setSelected] = useState("Item");
   const [searchField, setSearchField] = useState("");
+  const [displayMode, setDisplayMode] = useState("Item");
 
   const search = (selected, searchField) => {
-    console.log("Search pressed :" + selected);
-    if (selected === "Item") {
-      emptyAuctions();
-      getData(selected, searchField);
-    } else if (selected === "Owner") {
+    if (searchField !== "") {
+      setDisplayMode(selected);
+      console.log("Search pressed :" + selected);
       emptyAuctions();
       getData(selected, searchField);
     }
@@ -23,7 +22,7 @@ const AuctionList = props => {
     auctions: { auctions, extra },
     loadStatus: { error, loading },
     emptyAuctions,
-
+    sortActions,
     getData
   } = props;
 
@@ -74,6 +73,8 @@ const AuctionList = props => {
         auctions={auctions}
         target={extra}
         loading={loading}
+        displayMode={displayMode}
+        sortActions={sortActions}
       />
     </Fragment>
   );
@@ -92,5 +93,5 @@ function mapStateToProps(state) {
 }
 export default connect(
   mapStateToProps,
-  { getData, emptyAuctions }
+  { getData, emptyAuctions, sortActions }
 )(AuctionList);

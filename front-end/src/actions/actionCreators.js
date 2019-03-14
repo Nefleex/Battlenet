@@ -5,6 +5,8 @@ export const RECEIVE_AUCTIONS = "RECEIVE_AUCTIONS";
 export const EMPTY_AUCTIONS = "EMPTY_AUCTIONS";
 export const LOAD_ERROR = "LOAD_ERROR";
 export const END_LOAD = "END_LOAD";
+export const UPDATE_AUCTIONS = "UPDATE_AUCTIONS";
+export const SORT_AUCTIONS = "SORT_AUCTIONS";
 
 export function startLoad() {
   return {
@@ -33,6 +35,14 @@ export function loadError(error) {
   return {
     type: LOAD_ERROR,
     error: error
+  };
+}
+
+export function sortActions(k, payload) {
+  return {
+    type: SORT_AUCTIONS,
+    payload,
+    k
   };
 }
 
