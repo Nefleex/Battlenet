@@ -2,3 +2,8 @@
   box-sizing: border-box;
   margin: 0;
 }
+
+:root {
+  --main-bg-color: #3f3838;
+  --main-text-color: #dfdfdf;
+}

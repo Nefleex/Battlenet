@@ -1,10 +1,21 @@
 * {
   margin: 0;
 }
+.features {
+  grid-column: 2/10;
+  width: 90px;
+}
 
 .layout {
+  grid-template-columns: repeat(12, 1fr);
   height: 100%;
+  width: 100%;
 }
 .filler {
   height: 25px;
+}
+
+.main-content {
+  width: 90%;
+  margin: 0 auto;
 }

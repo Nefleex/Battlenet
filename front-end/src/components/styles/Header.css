@@ -1,15 +1,61 @@
+:root {
+  --main-bg-color: #3f3838;
+  --main-text-color: #ffdf00;
+  --main-font: "Dosis", sans-serif;
+}
+
 .header {
   width: 100%;
-  border: 1px solid black;
+  border: 1px solid white;
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  background-color: var(--main-bg-color);
+  color: var(--main-text-color);
+  font-family: var(--main-font);
+  font-weight: bolder;
+  letter-spacing: 3px;
 }
 
 .header-title {
+  grid-column: 2/3;
 }
 
 .header-login {
+  font-family: var(--main-font);
+  grid-column: 9/10;
+  display: inline-block;
+  border: none;
+  text-decoration: none;
+  color: var(--main-text-color);
+  background-color: var(--main-bg-color);
+  text-align: center;
+  cursor: pointer;
 }
 
 .header-sign-up {
+  font-family: var(--main-font);
+  grid-column: 10/11;
+  display: inline-block;
+  border: none;
+  text-decoration: none;
+  color: var(--main-text-color);
+  background-color: var(--main-bg-color);
+  text-align: center;
+  cursor: pointer;
+}
+.header-sign-up:focus {
+  outline: 0;
+}
+.header-login:focus {
+  outline: 0;
+}
+
+.header-sign-up:hover {
+  text-decoration: underline;
+}
+
+.header-login:hover {
+  text-decoration: underline;
 }
 
 .header-owner {

@@ -42,6 +42,8 @@ module.exports = {
       context: {
         type: Sequelize.BIGINT
       },
+      bonusLists: { type: DataTypes.JSON, allowNull: true },
+      modifiers: { type: DataTypes.JSON, allowNull: true },
       petSpeciesId: {
         type: Sequelize.BIGINT
       },

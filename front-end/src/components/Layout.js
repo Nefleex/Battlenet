@@ -20,7 +20,9 @@ const Layout = ({ history, ...props }) => {
     <div className="layout">
       <Header />
       <div className="filler" />
-      <FeatureBar history={history} />
+      <div className="main-content">
+        <FeatureBar history={history} />
+      </div>
     </div>
   );
 };

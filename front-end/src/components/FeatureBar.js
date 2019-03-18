@@ -6,12 +6,15 @@ const FeatureBar = ({ history }) => {
   //   const { history } = props;
   return (
     <div className="features">
-      <div className="auction">Auction</div>
-      <div className="owner">Owner</div>
-      <Link to="/">TO 1</Link>
-      <Link to="/2">TO 2</Link>
-      <Link to="/3">TO 3</Link>
-      <button onClick={() => history.push("/auctions")}>AUCTIONS</button>
+      <Link className="home" to="/">
+        Home
+      </Link>
+      <Link className="dashboard" to="/dashboard">
+        Dashboard
+      </Link>
+      <Link className="auctions" to="/auctions">
+        Auctions
+      </Link>
     </div>
   );
 };

@@ -2,7 +2,8 @@ import {
   RECEIVE_AUCTIONS,
   EMPTY_AUCTIONS,
   LOAD_AUCTIONS,
-  SORT_AUCTIONS
+  SORT_AUCTIONS,
+  SORT_AUCTIONS_ALPHABETICALLY
 } from "../actions/actionCreators";
 import { stat } from "fs";
 // import { initialState } from "./index";
@@ -26,15 +27,12 @@ export default function Auction(state = "", action) {
             return 1;
           } else if (parseInt(a[key]) > parseInt(b[key])) {
             return -1;
-          } else {
           }
         } else if (payload === "DESC") {
           if (parseInt(a[key]) > parseInt(b[key])) {
             return 1;
           } else if (parseInt(a[key]) < parseInt(b[key])) {
             return -1;
-          } else {
-            console.log("failed sort");
           }
         }
       };
@@ -42,6 +40,29 @@ export default function Auction(state = "", action) {
       return {
         ...state,
         auctions: sorted
+      };
+    case SORT_AUCTIONS_ALPHABETICALLY:
+      const sortByKeyAlphabetic = (key, payload) => (a, b) => {
+        if (payload === "ASC") {
+          if (a[key] < b[key]) {
+            return 1;
+          } else if (a[key] > b[key]) {
+            return -1;
+          }
+        } else if (payload === "DESC") {
+          if (a[key] > b[key]) {
+            return 1;
+          } else if (a[key] < b[key]) {
+            return -1;
+          }
+        }
+      };
+      const sortedA = state.auctions
+        .slice()
+        .sort(sortByKeyAlphabetic(k, payload));
+      return {
+        ...state,
+        auctions: sortedA
       };
     default:
       return state;

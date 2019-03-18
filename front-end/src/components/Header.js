@@ -5,12 +5,10 @@ const Header = () => {
   return (
     <div className="header">
       <div className="header-title">title</div>
-      <div className="header-login">
-        <button>login</button>
-      </div>
-      <div className="header-login">
-        <button>sign up</button>
-      </div>
+
+      <button className="header-login">login</button>
+
+      <button className="header-sign-up">sign up</button>
     </div>
   );
 };

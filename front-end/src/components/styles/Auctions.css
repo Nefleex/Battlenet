@@ -1,3 +1,18 @@
+:root {
+  --main-bg-color: #3f3838;
+  --main-text-color: #ffdf00;
+  --main-font: "Dosis", sans-serif;
+}
+
+.item-row,
+.column-names,
+.sort-by,
+.search-form,
+.auctions-main,
+.search-button {
+  font-family: var(--main-font);
+}
+
 .item-row {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
@@ -10,4 +25,16 @@
 .sort-by {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+}
+
+.search-form {
+  padding-top: 20px;
+}
+
+.auctions-main {
+  width: 90%;
+  margin: 0 auto;
+}
+
+.search-button {
 }

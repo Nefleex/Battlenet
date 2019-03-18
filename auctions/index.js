@@ -9,18 +9,22 @@ const headers = require("./middleware/headers");
 const db = require("./models");
 require("./util/yyyymmdd")();
 
+const getCred = require("./util/getCredentials");
+
 app.use(headers);
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use("/api/v1/auctions", auctions);
 
-// getCurrentlyAvailData();
+getCurrentlyAvailData();
 
-// schedule.scheduleJob("* /5 * * * *", function() {
-//   console.log("Scheduler running");
-//   getCurrentlyAvailData();
-// });
+schedule.scheduleJob("*/5 * * * *", function() {
+  console.log("Scheduler running");
+  getCurrentlyAvailData();
+});
 
 app.listen("3000", () => {
   console.log("Listening in port 3000.");
 });
+
+// getCred();

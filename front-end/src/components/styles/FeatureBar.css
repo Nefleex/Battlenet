@@ -1,4 +1,35 @@
+:root {
+  --main-bg-color: #3f3838;
+  --main-text-color: #ffdf00;
+  --main-font: "Dosis", sans-serif;
+}
+
 .features {
-  width: 90%;
-  border: 1px solid red;
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  width: 100%;
+  margin: auto;
+  font-family: var(--main-font);
+  border: 1px solid var(--main-text-color);
+  background: var(--main-bg-color);
+  color: var(--main-text-color);
+}
+
+.home {
+  grid-column: 2/3;
+}
+
+.dashboard {
+  grid-column: 3/4;
+}
+
+.auctions {
+  grid-column: 4/5;
+}
+
+a:visited {
+  text-decoration: none;
+}
+a {
+  color: var(--main-text-color);
 }

@@ -1,0 +1,9 @@
+.column-names:hover {
+  cursor: pointer;
+}
+
+.column-names {
+  border-top: grey 1px solid;
+  border-bottom: grey 1px solid;
+  font-weight: bolder;
+}

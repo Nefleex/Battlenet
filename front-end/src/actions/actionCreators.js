@@ -7,6 +7,7 @@ export const LOAD_ERROR = "LOAD_ERROR";
 export const END_LOAD = "END_LOAD";
 export const UPDATE_AUCTIONS = "UPDATE_AUCTIONS";
 export const SORT_AUCTIONS = "SORT_AUCTIONS";
+export const SORT_AUCTIONS_ALPHABETICALLY = "SORT_AUCTIONS_ALPHABETICALLY";
 
 export function startLoad() {
   return {
@@ -41,6 +42,13 @@ export function loadError(error) {
 export function sortActions(k, payload) {
   return {
     type: SORT_AUCTIONS,
+    payload,
+    k
+  };
+}
+export function sortActionsAlphabetically(k, payload) {
+  return {
+    type: SORT_AUCTIONS_ALPHABETICALLY,
     payload,
     k
   };

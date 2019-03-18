@@ -7,13 +7,14 @@ module.exports = async function() {
   let prevUpdate;
 
   getData = async (url, sourceLastUpdate) => {
+    count = 0;
+    data = [];
     try {
       await axios
         .get(url)
         .then(response => {
           console.log("Fetching and saving auction");
           response.data.auctions.forEach(auction => {
-            // console.log(auction);
             const {
               auc,
               item,
@@ -34,108 +35,33 @@ module.exports = async function() {
               petQualityId
             } = auction;
 
-            if (modifiers && bonusLists) {
-              db.Auction.create(
-                {
-                  aucId: auc,
-                  itemId: item,
-                  owner: owner,
-                  ownerRealm,
-                  ownerRealm,
-                  bid: bid,
-                  buyout: buyout,
-                  timeLeft: timeLeft,
-                  quantity: quantity,
-                  batchTimeId: sourceLastUpdate,
-                  rand: rand,
-                  seed: seed,
-                  context: context,
-                  petSpeciesId: petSpeciesId,
-                  petBreedId: petBreedId,
-                  petLevel: petLevel,
-                  petQualityId: petQualityId,
-                  BonusLists: bonusLists,
-                  Modifiers: auction.modifiers
-                },
-                {
-                  include: [{ model: db.Modifier }, { model: db.BonusList }]
-                }
-              ).catch(err => console.log(err));
-            }
-            if (modifiers && !bonusLists) {
-              db.Auction.create(
-                {
-                  aucId: auc,
-                  itemId: item,
-                  owner: owner,
-                  ownerRealm,
-                  ownerRealm,
-                  bid: bid,
-                  buyout: buyout,
-                  timeLeft: timeLeft,
-                  quantity: quantity,
-                  batchTimeId: sourceLastUpdate,
-                  rand: rand,
-                  seed: seed,
-                  context: context,
-                  petSpeciesId: petSpeciesId,
-                  petBreedId: petBreedId,
-                  petLevel: petLevel,
-                  petQualityId: petQualityId,
-                  Modifiers: auction.modifiers
-                },
-                {
-                  include: [{ model: db.Modifier }]
-                }
-              ).catch(err => console.log(err));
-            }
-            if (!modifiers && bonusLists) {
-              db.Auction.create(
-                {
-                  audId: auc,
-                  itemId: item,
-                  owner: owner,
-                  ownerRealm,
-                  ownerRealm,
-                  bid: bid,
-                  buyout: buyout,
-                  timeLeft: timeLeft,
-                  quantity: quantity,
-                  batchTimeId: sourceLastUpdate,
-                  rand: rand,
-                  seed: seed,
-                  context: context,
-                  petSpeciesId: petSpeciesId,
-                  petBreedId: petBreedId,
-                  petLevel: petLevel,
-                  petQualityId: petQualityId,
-                  BonusLists: bonusLists
-                },
-                {
-                  include: [{ model: db.BonusList }]
-                }
-              ).catch(err => console.log(err));
-            }
-            if (!modifiers && !bonusLists) {
-              db.Auction.create({
-                audId: auc,
-                itemId: item,
-                owner: owner,
-                ownerRealm,
-                ownerRealm,
-                bid: bid,
-                buyout: buyout,
-                timeLeft: timeLeft,
-                quantity: quantity,
-                batchTimeId: sourceLastUpdate,
-                rand: rand,
-                seed: seed,
-                context: context,
-                petSpeciesId: petSpeciesId,
-                petBreedId: petBreedId,
-                petLevel: petLevel,
-                petQualityId: petQualityId
-              }).catch(err => console.log(err));
+            data.push({
+              aucId: auc,
+              itemId: item,
+              owner: owner,
+              ownerRealm,
+              ownerRealm,
+              bid: bid,
+              buyout: buyout,
+              timeLeft: timeLeft,
+              quantity: quantity,
+              batchTimeId: sourceLastUpdate,
+              rand: rand,
+              seed: seed,
+              context: context,
+              petSpeciesId: petSpeciesId,
+              petBreedId: petBreedId,
+              petLevel: petLevel,
+              petQualityId: petQualityId,
+              bonusLists: bonusLists,
+              modifiers: modifiers
+            });
+            count++;
+
+            if (count < 100) {
+              db.Auction.bulkCreate(data, { raw: true });
+              count = 0;
+              data = [];
             }
           });
         })
@@ -156,8 +82,6 @@ module.exports = async function() {
       let sourceLastUpdate;
 
       await db.Auction.sync();
-      await db.Modifier.sync();
-      await db.BonusList.sync();
 
       console.log("before getLatestTimestamp");
       prevUpdate = await getLatestTimestamp();

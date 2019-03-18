@@ -1,6 +1,11 @@
 import React, { Fragment, useState } from "react";
 import { connect } from "react-redux";
-import { getData, emptyAuctions, sortActions } from "../actions/actionCreators";
+import {
+  getData,
+  emptyAuctions,
+  sortActions,
+  sortActionsAlphabetically
+} from "../actions/actionCreators";
 import AuctionTable from "./AuctionTable";
 import "./styles/Auctions.css";
 
@@ -23,49 +28,55 @@ const AuctionList = props => {
     loadStatus: { error, loading },
     emptyAuctions,
     sortActions,
+    sortActionsAlphabetically,
     getData
   } = props;
 
   //Render
   return (
-    <Fragment>
-      <div>This is auctions</div>
+    <div className="auctions-main">
+      <form action="#" className="search-form">
+        <label className="search-label" for="select-search-option">
+          &#36;earch by:
+        </label>
+        <select
+          id="select-search-option"
+          className="select-search-option"
+          onChange={e => {
+            setSelected(e.target.value);
+            console.log(selected);
+          }}
+        >
+          <option name="item" value="Item">
+            Item
+          </option>
+          <option name="owner" value="Owner">
+            Owner
+          </option>
+        </select>
+        <input
+          type="text"
+          className="search-input"
+          name="search"
+          onChange={e => {
+            setSearchField(e.target.value);
+          }}
+          onKeyPress={e => {
+            if ((e.keyCode || e.charCode || e.which) === 13) {
+              e.preventDefault();
+              search(selected, searchField);
+            }
+          }}
+        />
+        <button
+          className="search-button"
+          type="button"
+          onClick={() => search(selected, searchField)}
+        >
+          Search
+        </button>
+      </form>
 
-      <button onClick={() => console.log(props)}>
-        Print redux store of this component
-      </button>
-      <p>Search by:</p>
-      <select
-        className="select-search-option"
-        onChange={e => {
-          setSelected(e.target.value);
-          console.log(selected);
-        }}
-      >
-        <option name="item" value="Item">
-          Item
-        </option>
-        <option name="owner" value="Owner">
-          Owner
-        </option>
-      </select>
-      <input
-        type="text"
-        className="search-input"
-        name="search"
-        onChange={e => {
-          setSearchField(e.target.value);
-        }}
-      />
-      <button onClick={() => search(selected, searchField)}>Search</button>
-      <hr />
-      {/* <ul>
-        {auctions.map((auction, i) => {
-          return <li key={i}>{auction.id}</li>;
-        })}
-      </ul> */}
-      <button onClick={() => console.log(auctions)}>Auctions test</button>
-      <button onClick={() => console.log(loading)}>Loading</button>
       <hr />
       <Error error={error} />
       <AuctionTable
@@ -75,8 +86,9 @@ const AuctionList = props => {
         loading={loading}
         displayMode={displayMode}
         sortActions={sortActions}
+        sortActionsAlphabetically={sortActionsAlphabetically}
       />
-    </Fragment>
+    </div>
   );
 };
 
@@ -93,5 +105,5 @@ function mapStateToProps(state) {
 }
 export default connect(
   mapStateToProps,
-  { getData, emptyAuctions, sortActions }
+  { getData, emptyAuctions, sortActions, sortActionsAlphabetically }
 )(AuctionList);
