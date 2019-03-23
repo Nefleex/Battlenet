@@ -1,0 +1,11 @@
+:root {
+  --main-bg-color: #3f3838;
+  --main-text-color: #ffdf00;
+  --main-font: "Dosis", sans-serif;
+}
+.dashboard-main {
+  width: 90%;
+  margin: 0 auto;
+  border: black solid 1px;
+  margin-top: 20px;
+}

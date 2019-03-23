@@ -2,7 +2,6 @@ const express = require("express");
 const schedule = require("node-schedule");
 const app = express();
 const getCurrentlyAvailData = require("./util/getCurrentlyAvailableData");
-const getAllItems = require("./util/getAllItems");
 const bodyParser = require("body-parser");
 const auctions = require("./routes/v1/auctions");
 const headers = require("./middleware/headers");

@@ -28,12 +28,12 @@
 }
 
 .search-form {
-  padding-top: 20px;
 }
 
 .auctions-main {
   width: 90%;
   margin: 0 auto;
+  margin-top: 20px;
 }
 
 .search-button {

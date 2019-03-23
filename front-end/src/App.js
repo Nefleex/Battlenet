@@ -2,13 +2,10 @@ import React, { Fragment } from "react";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 import Layout from "./components/Layout";
 import Auctions from "./components/Auctions";
+import Dashboard from "./components/Dashboard";
 
 const Home = () => {
   return <div>Home</div>;
-};
-
-const Dashboard = () => {
-  return <div>Dashboard</div>;
 };
 
 const App = () => (

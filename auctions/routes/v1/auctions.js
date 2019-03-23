@@ -2,6 +2,17 @@ const express = require("express");
 const router = express.Router();
 const db = require("../../models");
 const getLatestTimestamp = require("../../util/getLatestTimestamp");
+const getMaxQtyItems = require("../../util/getItemOfMostQuantity");
+const getMostExpAuc = require("../../util/getMostExpensiveAuctions");
+
+// Get Item name for id
+const retrieveItemInfo = async val => {
+  const result = await db.Item.find({
+    where: { id: val },
+    raw: true
+  });
+  return result;
+};
 
 // Route for getting auctions from latest scan by an item name. Returns an array as a result
 // http://localhost:3000/api/v1/auctions/by_item/?item=Example_Item_Name
@@ -17,7 +28,7 @@ router.get("/by_item/", async (req, res) => {
     latestTimestamp = await getLatestTimestamp();
   } catch (err) {
     console.log(err);
-    return res.status(501).send("Internal server error");
+    return res.status(500).send("Internal server error");
   }
 
   // Find Item with query's name
@@ -61,15 +72,6 @@ router.get("/by_item/", async (req, res) => {
   }
 });
 
-// Get Item name for id
-const retrieveItemInfo = async val => {
-  const result = await db.Item.find({
-    where: { id: val },
-    raw: true
-  });
-  return result;
-};
-
 // Route for getting auctions from latest scan by an owner name. Returns an array as a result
 // http://localhost:3000/api/v1/auctions/by_name/?name=Example_Item_Name
 router.get("/by_owner/", async (req, res) => {
@@ -111,6 +113,32 @@ router.get("/by_owner/", async (req, res) => {
   } catch (err) {
     console.log(err);
     return res.status(500).send("Internal server error");
+  }
+});
+
+router.get("/max/", async (req, res) => {
+  const owner = req.query.owner;
+  const maxPriceOfItem = req.query.price;
+  const maxAmountOfItem = req.query.amount;
+  const limit = req.query.limit;
+  console.log(``);
+
+  try {
+    // select itemId, sum(quantity) q from auctions.auctions where batchTimeID="1553151645000"  group by itemId order by q desc
+    if (maxAmountOfItem) {
+      const result = await getMaxQtyItems(limit);
+      console.log(result);
+      res.send(result);
+    }
+    if (maxPriceOfItem) {
+      const result = await getMostExpAuc(limit);
+
+      console.log(result);
+      res.send(result);
+    }
+  } catch (err) {
+    console.log(err);
+    res.status(500).send("Internal server error 500");
   }
 });
 
