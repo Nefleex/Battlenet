@@ -7,7 +7,7 @@ module.exports = async limit => {
     const latestTimestamp = await getLatestTimestamp();
     if (!limit) {
       maxItems = await db.sequelize.query(
-        `SELECT itemId, sum(quantity) quantity from Auctions WHERE batchTimeId="${latestTimestamp}" group by itemId order by quantity desc`,
+        `SELECT a.itemId, sum(a.quantity) as quantity, i.name FROM Auctions AS a, Items AS i WHERE batchTimeId="${latestTimestamp}" and a.itemId=i.id GROUP BY a.itemId ORDER BY quantity DESC`,
         {
           type: db.sequelize.QueryTypes.SELECT
         }
@@ -15,7 +15,7 @@ module.exports = async limit => {
       return maxItems;
     } else if (limit) {
       maxItems = await db.sequelize.query(
-        `SELECT itemId, sum(quantity) quantity from Auctions WHERE batchTimeId="${latestTimestamp}" group by itemId order by quantity desc limit ${limit}`,
+        `SELECT a.itemId, SUM(a.quantity) as quantity, i.name FROM Auctions AS a, Items AS i WHERE batchTimeId="${latestTimestamp}" and a.itemId=i.id GROUP BY a.itemId ORDER BY quantity DESC LIMIT ${limit}`,
         {
           type: db.sequelize.QueryTypes.SELECT
         }
@@ -26,3 +26,14 @@ module.exports = async limit => {
     throw Error(err);
   }
 };
+
+// db.sequelize.query(
+//   `SELECT a.itemId, sum(a.quantity) a.quantity, i.name
+// from Auctions a, Items i
+// WHERE batchTimeId="${latestTimestamp}"
+// and a.itemId=i.itemId
+// group by a.itemId order by a.quantity desc limit ${limit}`,
+//   {
+//     type: db.sequelize.QueryTypes.SELECT
+//   }
+// );

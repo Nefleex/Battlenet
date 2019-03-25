@@ -6,7 +6,7 @@ module.exports = async limit => {
     if (limit) {
       const latestTimestamp = await getLatestTimestamp();
       const items = await db.sequelize.query(
-        `SELECT itemId, buyout from Auctions where batchTimeId="${latestTimestamp}"  order by buyout desc limit ${limit}`,
+        `SELECT a.itemId, a.buyout, i.name FROM Auctions AS a, Items AS i WHERE batchTimeId="${latestTimestamp}" and a.itemId=i.id ORDER BY buyout DESC LIMIT ${limit}`,
         {
           type: db.sequelize.QueryTypes.SELECT
         }
@@ -16,7 +16,7 @@ module.exports = async limit => {
     } else if (!limit) {
       const latestTimestamp = await getLatestTimestamp();
       const items = await db.sequelize.query(
-        `SELECT itemId, buyout from Auctions where batchTimeId="${latestTimestamp}"  order by buyout desc`,
+        `SELECT a.itemId, a.buyout, i.name FROM Auctions AS a, Items AS i WHERE batchTimeId="${latestTimestamp}"  ORDER BY buyout DESC`,
         {
           type: db.sequelize.QueryTypes.SELECT
         }

@@ -1,6 +1,6 @@
 "use strict";
 module.exports = (sequelize, DataTypes) => {
-  const item = sequelize.define(
+  const Item = sequelize.define(
     "Item",
     {
       id: { type: DataTypes.BIGINT, primaryKey: true },
@@ -9,8 +9,8 @@ module.exports = (sequelize, DataTypes) => {
     },
     {}
   );
-  item.associate = function(models) {
+  Item.associate = function(models) {
     // associations can be defined here
   };
-  return item;
+  return Item;
 };

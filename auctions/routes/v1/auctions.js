@@ -4,6 +4,7 @@ const db = require("../../models");
 const getLatestTimestamp = require("../../util/getLatestTimestamp");
 const getMaxQtyItems = require("../../util/getItemOfMostQuantity");
 const getMostExpAuc = require("../../util/getMostExpensiveAuctions");
+const getMostAucByOwner = require("../../util/getMostAuctionsByOwner");
 
 // Get Item name for id
 const retrieveItemInfo = async val => {
@@ -132,7 +133,11 @@ router.get("/max/", async (req, res) => {
     }
     if (maxPriceOfItem) {
       const result = await getMostExpAuc(limit);
-
+      console.log(result);
+      res.send(result);
+    }
+    if (owner) {
+      const result = await getMostAucByOwner(limit);
       console.log(result);
       res.send(result);
     }
