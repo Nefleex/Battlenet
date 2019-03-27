@@ -4,6 +4,8 @@
   --main-font: "Dosis", sans-serif;
 }
 .dashboard-main {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
   width: 90%;
   margin: 0 auto;
   border: black solid 1px;

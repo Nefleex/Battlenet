@@ -17,7 +17,7 @@ const retrieveItemInfo = async val => {
 
 // Route for getting auctions from latest scan by an item name. Returns an array as a result
 // http://localhost:3000/api/v1/auctions/by_item/?item=Example_Item_Name
-router.get("/by_item/", async (req, res) => {
+router.get("/by_item", async (req, res) => {
   console.log("Received");
 
   let resultId;
@@ -37,7 +37,7 @@ router.get("/by_item/", async (req, res) => {
     const result = await db.Item.find({
       where: { name: { $like: `%${item}%` } }
     });
-    debugger;
+
     if (!result || result.length === 0) {
       return res.status(404).send("No results for that item");
     } else {
@@ -75,7 +75,7 @@ router.get("/by_item/", async (req, res) => {
 
 // Route for getting auctions from latest scan by an owner name. Returns an array as a result
 // http://localhost:3000/api/v1/auctions/by_name/?name=Example_Item_Name
-router.get("/by_owner/", async (req, res) => {
+router.get("/by_owner", async (req, res) => {
   let latestTimestamp;
   const owner = req.query.owner;
   try {
@@ -117,33 +117,46 @@ router.get("/by_owner/", async (req, res) => {
   }
 });
 
-router.get("/max/", async (req, res) => {
-  const owner = req.query.owner;
-  const maxPriceOfItem = req.query.price;
-  const maxAmountOfItem = req.query.amount;
-  const limit = req.query.limit;
-  console.log(``);
+// router.get("/max", async (req, res) => {
+//   const owner = req.query.owner;
+//   const maxPriceOfItem = req.query.price;
+//   const maxAmountOfItem = req.query.amount;
+//   const limit = req.query.limit;
+//   console.log(``);
 
+//   try {
+//     // select itemId, sum(quantity) q from auctions.auctions where batchTimeID="1553151645000"  group by itemId order by q desc
+//     if (maxAmountOfItem) {
+//       const result = await getMaxQtyItems(limit);
+//       console.log(result);
+//       return res.send(result);
+//     }
+//     if (maxPriceOfItem) {
+//       const result = await getMostExpAuc(limit);
+//       console.log(result);
+//       return res.send(result);
+//     }
+//     if (owner) {
+//       const result = await getMostAucByOwner(limit);
+//       console.log(result);
+//       return res.send(result);
+//     }
+//   } catch (err) {
+//     console.log(err);
+//     return res.status(500).send("Internal server error 500");
+//   }
+// });
+
+router.get("/dashboard", async (req, res) => {
   try {
-    // select itemId, sum(quantity) q from auctions.auctions where batchTimeID="1553151645000"  group by itemId order by q desc
-    if (maxAmountOfItem) {
-      const result = await getMaxQtyItems(limit);
-      console.log(result);
-      res.send(result);
-    }
-    if (maxPriceOfItem) {
-      const result = await getMostExpAuc(limit);
-      console.log(result);
-      res.send(result);
-    }
-    if (owner) {
-      const result = await getMostAucByOwner(limit);
-      console.log(result);
-      res.send(result);
-    }
+    const limit = req.query.limit || 5;
+    const result = {};
+    result.maxQty = await getMaxQtyItems(limit);
+    result.maxPrice = await getMostExpAuc(limit);
+    result.maxByOwner = await getMostAucByOwner(limit);
+    return res.send(result);
   } catch (err) {
-    console.log(err);
-    res.status(500).send("Internal server error 500");
+    return res.status(500).send("Oops! Something went wrong.");
   }
 });
 

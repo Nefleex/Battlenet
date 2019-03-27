@@ -2,6 +2,7 @@ import {
   RECEIVE_AUCTIONS,
   EMPTY_AUCTIONS,
   LOAD_AUCTIONS,
+  RECEIVE_DASHBOARD_AUCTIONS,
   SORT_AUCTIONS,
   SORT_AUCTIONS_ALPHABETICALLY
 } from "../actions/actionCreators";
@@ -19,6 +20,12 @@ export default function Auction(state = "", action) {
       };
     case EMPTY_AUCTIONS:
       return { ...state, auctions: null, extra: null };
+
+    case RECEIVE_DASHBOARD_AUCTIONS:
+      return {
+        ...state,
+        auctions: { ...state.auctions, dashboard: payload }
+      };
 
     case SORT_AUCTIONS:
       const sortByKey = (key, payload) => (a, b) => {
@@ -41,6 +48,7 @@ export default function Auction(state = "", action) {
         ...state,
         auctions: sorted
       };
+
     case SORT_AUCTIONS_ALPHABETICALLY:
       const sortByKeyAlphabetic = (key, payload) => (a, b) => {
         if (payload === "ASC") {
@@ -64,6 +72,7 @@ export default function Auction(state = "", action) {
         ...state,
         auctions: sortedA
       };
+
     default:
       return state;
   }

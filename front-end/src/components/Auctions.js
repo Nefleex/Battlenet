@@ -36,7 +36,7 @@ const AuctionList = props => {
   return (
     <div className="auctions-main">
       <form action="#" className="search-form">
-        <label className="search-label" for="select-search-option">
+        <label className="search-label" htmlFor="select-search-option">
           &#36;earch by:
         </label>
         <select
