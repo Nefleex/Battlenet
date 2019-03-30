@@ -1,8 +1,13 @@
 "use strict";
 module.exports = (sequelize, DataTypes) => {
-  const Auction = sequelize.define(
-    "Auction",
+  const History = sequelize.define(
+    "History",
     {
+      id: {
+        allowNull: false,
+        primaryKey: true,
+        type: DataTypes.INTEGER
+      },
       aucId: DataTypes.BIGINT,
       itemId: DataTypes.BIGINT,
       owner: DataTypes.STRING,
@@ -24,6 +29,6 @@ module.exports = (sequelize, DataTypes) => {
     },
     {}
   );
-  Auction.associate = function(models) {};
-  return Auction;
+  History.associate = function(models) {};
+  return History;
 };

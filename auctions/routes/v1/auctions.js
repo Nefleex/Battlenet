@@ -5,6 +5,7 @@ const getLatestTimestamp = require("../../util/getLatestTimestamp");
 const getMaxQtyItems = require("../../util/getItemOfMostQuantity");
 const getMostExpAuc = require("../../util/getMostExpensiveAuctions");
 const getMostAucByOwner = require("../../util/getMostAuctionsByOwner");
+const checkStatus = require("../../util/checkInsertStatus");
 
 // Get Item name for id
 const retrieveItemInfo = async val => {
@@ -52,11 +53,19 @@ router.get("/by_item", async (req, res) => {
   }
 
   try {
-    const result = await db.Auction.findAll({
-      where: { itemId: resultId, batchTimeId: latestTimestamp },
-      raw: true
-    });
-    console.log("Result: ");
+    const status = await checkStatus();
+    let result;
+    if (status !== 0) {
+      result = await db.StandBy.findAll({
+        where: { itemId: resultId, batchTimeId: latestTimestamp },
+        raw: true
+      });
+    } else if (status === 0) {
+      result = await db.Newest.findAll({
+        where: { itemId: resultId, batchTimeId: latestTimestamp },
+        raw: true
+      });
+    }
 
     resultFinal = result.map(auction => {
       // Cut off decimals, convert to string to be able to slice on front end
@@ -69,13 +78,16 @@ router.get("/by_item", async (req, res) => {
       return res.json({ auctions: resultFinal, extra: resultName });
     }
   } catch (err) {
+    console.log(err);
     return res.status(500).send("Internal server error");
   }
 });
 
 // Route for getting auctions from latest scan by an owner name. Returns an array as a result
-// http://localhost:3000/api/v1/auctions/by_name/?name=Example_Item_Name
+// http://localhost:3000/api/v1/auctions/by_owner/?owner=Example_Item_Name
 router.get("/by_owner", async (req, res) => {
+  // const status = await checkStatus();
+  // console.log(status);
   let latestTimestamp;
   const owner = req.query.owner;
   try {
@@ -86,7 +98,7 @@ router.get("/by_owner", async (req, res) => {
   }
 
   try {
-    const result = await db.Auction.findAll({
+    const result = await db.Newest.findAll({
       where: { owner, batchTimeId: latestTimestamp },
       raw: true
     });
@@ -117,45 +129,18 @@ router.get("/by_owner", async (req, res) => {
   }
 });
 
-// router.get("/max", async (req, res) => {
-//   const owner = req.query.owner;
-//   const maxPriceOfItem = req.query.price;
-//   const maxAmountOfItem = req.query.amount;
-//   const limit = req.query.limit;
-//   console.log(``);
-
-//   try {
-//     // select itemId, sum(quantity) q from auctions.auctions where batchTimeID="1553151645000"  group by itemId order by q desc
-//     if (maxAmountOfItem) {
-//       const result = await getMaxQtyItems(limit);
-//       console.log(result);
-//       return res.send(result);
-//     }
-//     if (maxPriceOfItem) {
-//       const result = await getMostExpAuc(limit);
-//       console.log(result);
-//       return res.send(result);
-//     }
-//     if (owner) {
-//       const result = await getMostAucByOwner(limit);
-//       console.log(result);
-//       return res.send(result);
-//     }
-//   } catch (err) {
-//     console.log(err);
-//     return res.status(500).send("Internal server error 500");
-//   }
-// });
-
 router.get("/dashboard", async (req, res) => {
   try {
+    const status = await checkStatus();
+    const latestTimestamp = await getLatestTimestamp();
     const limit = req.query.limit || 5;
     const result = {};
-    result.maxQty = await getMaxQtyItems(limit);
-    result.maxPrice = await getMostExpAuc(limit);
-    result.maxByOwner = await getMostAucByOwner(limit);
+    result.maxQty = await getMaxQtyItems(status, limit, latestTimestamp);
+    result.maxPrice = await getMostExpAuc(status, limit, latestTimestamp);
+    result.maxByOwner = await getMostAucByOwner(status, limit, latestTimestamp);
     return res.send(result);
   } catch (err) {
+    console.log(err);
     return res.status(500).send("Oops! Something went wrong.");
   }
 });

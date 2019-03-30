@@ -1,8 +1,14 @@
 "use strict";
 module.exports = (sequelize, DataTypes) => {
-  const Auction = sequelize.define(
-    "Auction",
+  const Newest = sequelize.define(
+    "Newest",
     {
+      id: {
+        allowNull: false,
+        autoIncrement: true,
+        primaryKey: true,
+        type: DataTypes.INTEGER
+      },
       aucId: DataTypes.BIGINT,
       itemId: DataTypes.BIGINT,
       owner: DataTypes.STRING,
@@ -24,6 +30,6 @@ module.exports = (sequelize, DataTypes) => {
     },
     {}
   );
-  Auction.associate = function(models) {};
-  return Auction;
+  Newest.associate = function(models) {};
+  return Newest;
 };

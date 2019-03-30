@@ -2,6 +2,7 @@ const express = require("express");
 const schedule = require("node-schedule");
 const app = express();
 const getCurrentlyAvailData = require("./util/getCurrentlyAvailableData");
+const initStatus = require("./util/initInsertStatus");
 const bodyParser = require("body-parser");
 const auctions = require("./routes/v1/auctions");
 const headers = require("./middleware/headers");
@@ -13,6 +14,9 @@ const getCred = require("./util/getCredentials");
 app.use(headers);
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+
+initStatus();
+
 app.use("/api/v1/auctions", auctions);
 
 getCurrentlyAvailData();
