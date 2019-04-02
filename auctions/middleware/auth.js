@@ -19,7 +19,7 @@ module.exports = function(req, res, next) {
         res.status(401).send("Unauthorized: Invalid token");
       } else {
         // Attach verified and decoded token payload to request body
-        req.body.decoded = decoded;
+        req.decoded = decoded;
         next();
       }
     });

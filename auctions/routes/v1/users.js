@@ -55,7 +55,6 @@ router.post("/login", async (req, res) => {
   let password = req.body.password;
   console.log(username);
   console.log(password);
-  console.log(config);
 
   try {
     const result = await db.User.find({
@@ -95,7 +94,7 @@ router.post("/me", (req, res) => {});
 // Add to tracking
 router.post("/track", auth, async (req, res) => {
   // Get data to be saved from request body, identity from decrypted token
-  const { username, id } = req.body.decoded.payload;
+  const { username, id } = req.decoded.payload;
   const { data } = req.body;
   try {
     const result = await db.Track.create({ UserId: id, owner: data });
@@ -111,8 +110,77 @@ router.post("/track", auth, async (req, res) => {
       res.status(500).send("Internal server error");
     }
   }
+});
 
-  // Save payload to tracked
+// Get all owners with auctions posted
+router.get("/track/auctions", auth, async (req, res) => {
+  const { id } = req.decoded.payload;
+  try {
+    const userData = await db.User.findAll({
+      where: { id },
+      attributes: ["id", "username"],
+      include: [{ model: db.Track, attributes: ["owner", "userId"] }],
+      raw: true
+    });
+
+    // Map owners into array
+    const owners = userData.map(el => {
+      return el["Tracks.owner"];
+    });
+
+    // Find auction entries for each owner
+    const tracked = Promise.all(
+      owners.map(async owner => {
+        const ownerAuctions = await db.Newest.findAll({
+          where: { owner },
+          raw: true
+        });
+
+        // if owner has no auctions, return null for later filtering
+        if (ownerAuctions.length === 0) {
+          return null;
+        } else {
+          return { owner, auctions: ownerAuctions };
+        }
+      })
+    );
+    const raw = await tracked;
+    const result = raw.filter(el => {
+      if (el === null) {
+        return false;
+      } else {
+        return true;
+      }
+    });
+    // console.log(result);
+
+    res.send(result);
+  } catch (err) {
+    console.log(err);
+    res.status(500).send("Internal server error");
+  }
+});
+
+// Get all user's tracked auction owners
+router.get("/track", auth, async (req, res) => {
+  const { username, id } = req.decoded.payload;
+  console.log(username);
+  console.log(id);
+  try {
+    const tracking = await db.User.findAll({
+      where: { id },
+      include: [{ model: db.Track }],
+      raw: true
+    });
+    const owners = tracking.map(item => {
+      return item["Tracks.owner"];
+    });
+    console.log(owners);
+    res.send(owners);
+  } catch (err) {
+    console.log(err);
+    res.status(500).send("Internal server error");
+  }
 });
 
 module.exports = router;
