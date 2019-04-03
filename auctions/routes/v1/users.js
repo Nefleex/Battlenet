@@ -8,6 +8,14 @@ const env = process.env.NODE_ENV || "development";
 const config = require("../../config/config.json")[env];
 const auth = require("../../middleware/auth");
 
+const retrieveItemInfo = async val => {
+  const result = await db.Item.find({
+    where: { id: val },
+    raw: true
+  });
+  return result;
+};
+
 router.post("/register", async (req, res) => {
   const username = req.body.username;
   const password = req.body.password;
@@ -140,7 +148,14 @@ router.get("/track/auctions", auth, async (req, res) => {
         if (ownerAuctions.length === 0) {
           return null;
         } else {
-          return { owner, auctions: ownerAuctions };
+          const auctions = Promise.all(
+            ownerAuctions.map(async auction => {
+              const itemInfo = await retrieveItemInfo(auction.itemId);
+              return { ...auction, itemName: itemInfo.name, data: itemInfo };
+            })
+          );
+          const finalizedAuctions = await auctions;
+          return { owner, auctions: finalizedAuctions };
         }
       })
     );
