@@ -5,7 +5,7 @@ import {
   emptyAuctions,
   sortActions,
   sortActionsAlphabetically
-} from "../actions/actionCreators";
+} from "../actions/auctionActionCreators";
 import AuctionTable from "./AuctionTable";
 import "./styles/Auctions.css";
 
@@ -24,8 +24,7 @@ const AuctionList = props => {
   };
   //Destructuring props
   const {
-    auctions: { auctions, extra },
-    loadStatus: { error, loading },
+    auctions: { auctions, extra, error, loading },
     emptyAuctions,
     sortActions,
     sortActionsAlphabetically,
@@ -96,13 +95,12 @@ const Error = ({ error }) => {
   return error ? <div style={{ color: "red" }}>{error}</div> : null;
 };
 
-function mapStateToProps(state) {
+const mapStateToProps = state => {
   // const { auctions, error, loading } = state.Auction;
   return {
-    auctions: state.Auction,
-    loadStatus: state.Loading
+    auctions: state.Auction
   };
-}
+};
 export default connect(
   mapStateToProps,
   { getData, emptyAuctions, sortActions, sortActionsAlphabetically }

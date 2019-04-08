@@ -1,22 +1,21 @@
 import React, { Fragment, useEffect } from "react";
 import { connect } from "react-redux";
-import { getDashboard } from "../actions/actionCreators";
+import { getDashboard } from "../actions/dashboardActionCreators";
 import "./styles/Dashboard.css";
 
-const Dashboard = ({ getDashboard, ...props }) => {
+const Dashboard = ({ getDashboard, url, ...props }) => {
   useEffect(() => {
-    const urls = [
-      "http://localhost:3000/api/v1/auctions/max?amount=true&limit=4",
-      "http://localhost:3000/api/v1/auctions/max?owner=true&limit=4",
-      "http://localhost:3000/api/v1/auctions/max?price=true&limit=4"
-    ];
-    getDashboard();
+    getDashboard(url);
   }, []);
+  const {
+    dashboard: { response }
+  } = props;
   return (
     <Fragment>
       <div className="dashboard-main">
         <div>
-          <button onClick={() => console.log(props)}>click</button>
+          <h4>Dashboard</h4>
+          <div>{JSON.stringify(response)}</div>
         </div>
       </div>
     </Fragment>
@@ -26,8 +25,7 @@ const Dashboard = ({ getDashboard, ...props }) => {
 function mapStateToProps(state) {
   // const { auctions, error, loading } = state.Auction;
   return {
-    auctions: state.Auction,
-    loadStatus: state.Loading
+    dashboard: state.Dashboard
   };
 }
 

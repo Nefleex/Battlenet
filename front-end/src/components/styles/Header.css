@@ -22,7 +22,7 @@
 
 .header-login {
   font-family: var(--main-font);
-  grid-column: 9/10;
+  grid-column: 8/9;
   display: inline-block;
   border: none;
   text-decoration: none;
@@ -34,7 +34,7 @@
 
 .header-sign-up {
   font-family: var(--main-font);
-  grid-column: 10/11;
+  grid-column: 9/10;
   display: inline-block;
   border: none;
   text-decoration: none;

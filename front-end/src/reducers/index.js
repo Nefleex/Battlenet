@@ -1,5 +1,7 @@
 import { combineReducers } from "redux";
 import Auction from "./auction";
-import Loading from "./loading";
+import User from "./user";
+import Register from "./register";
+import Dashboard from "./dashboard";
 
-export default combineReducers({ Auction, Loading });
+export default combineReducers({ Auction, User, Register, Dashboard });

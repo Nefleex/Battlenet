@@ -1,10 +1,8 @@
-import axios from "axios";
-
-export const START_LOAD = "START_LOAD";
+export const START_LOAD_AUCTION = "START_LOAD_AUCTION";
+export const END_LOAD_AUCTION = "END_LOAD_AUCTION";
+export const ERROR_LOAD_AUCTION = "ERROR_LOAD_AUCTION";
 export const RECEIVE_AUCTIONS = "RECEIVE_AUCTIONS";
 export const EMPTY_AUCTIONS = "EMPTY_AUCTIONS";
-export const LOAD_ERROR = "LOAD_ERROR";
-export const END_LOAD = "END_LOAD";
 export const UPDATE_AUCTIONS = "UPDATE_AUCTIONS";
 export const SORT_AUCTIONS = "SORT_AUCTIONS";
 export const SORT_AUCTIONS_ALPHABETICALLY = "SORT_AUCTIONS_ALPHABETICALLY";
@@ -12,7 +10,7 @@ export const RECEIVE_DASHBOARD_AUCTIONS = "RECEIVE_DASHBOARD_AUCTIONS";
 
 export function startLoad() {
   return {
-    type: START_LOAD
+    type: START_LOAD_AUCTION
   };
 }
 function receiveAuctions(data, extra) {
@@ -24,7 +22,7 @@ function receiveAuctions(data, extra) {
 }
 function stopLoading() {
   return {
-    type: END_LOAD
+    type: END_LOAD_AUCTION
   };
 }
 
@@ -42,7 +40,7 @@ export function emptyAuctions() {
 }
 export function loadError(error) {
   return {
-    type: LOAD_ERROR,
+    type: ERROR_LOAD_AUCTION,
     error: error
   };
 }
@@ -63,9 +61,8 @@ export function sortActionsAlphabetically(k, payload) {
 }
 
 const handleError = (response, dispatch) => {
-  if (response.ok) {
-    return response;
-  }
+  if (response.ok) return response;
+
   response
     .text()
     .then(error => {
@@ -86,7 +83,6 @@ export const getData = (where, param) => {
       .then(response => response.json())
       .then(data => {
         dispatch(receiveAuctions(data.auctions, data.extra));
-        dispatch(stopLoading());
       })
       .catch(err => console.log(err));
   };

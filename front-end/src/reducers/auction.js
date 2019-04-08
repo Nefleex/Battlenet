@@ -4,27 +4,48 @@ import {
   LOAD_AUCTIONS,
   RECEIVE_DASHBOARD_AUCTIONS,
   SORT_AUCTIONS,
-  SORT_AUCTIONS_ALPHABETICALLY
-} from "../actions/actionCreators";
-import { stat } from "fs";
-// import { initialState } from "./index";
+  SORT_AUCTIONS_ALPHABETICALLY,
+  START_LOAD_AUCTION,
+  END_LOAD_AUCTION,
+  ERROR_LOAD_AUCTION
+} from "../actions/auctionActionCreators";
 
 export default function Auction(state = "", action) {
-  const { payload, type, extra, k } = action;
+  const { payload, type, extra, k, error } = action;
   switch (type) {
+    case START_LOAD_AUCTION:
+      return {
+        ...state,
+        loading: true
+      };
+    case END_LOAD_AUCTION:
+      return {
+        ...state,
+        loading: false
+      };
+    case ERROR_LOAD_AUCTION:
+      return {
+        ...state,
+        error,
+        loading: false
+      };
     case RECEIVE_AUCTIONS:
       return {
         ...state,
         auctions: payload,
-        extra
+        extra,
+        loading: false
       };
     case EMPTY_AUCTIONS:
-      return { ...state, auctions: null, extra: null };
+      const newState = { ...state };
+      delete newState.auctions;
+      delete newState.extra;
+      return "";
 
     case RECEIVE_DASHBOARD_AUCTIONS:
       return {
         ...state,
-        auctions: { ...state.auctions, dashboard: payload }
+        dashboard: payload
       };
 
     case SORT_AUCTIONS:

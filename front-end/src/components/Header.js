@@ -1,16 +1,58 @@
 import React, { useEffect } from "react";
+import { NavLink } from "react-router-dom";
+import { connect } from "react-redux";
+import { logout } from "../actions/userActionCreators";
 import "./styles/Header.css";
 
-const Header = () => {
-  return (
-    <div className="header">
-      <div className="header-title">title</div>
-
-      <button className="header-login">login</button>
-
-      <button className="header-sign-up">sign up</button>
-    </div>
-  );
+const Header = props => {
+  const {
+    user: { user },
+    logout
+  } = props;
+  if (!user) {
+    return (
+      <div className="header">
+        <div className="header-title">title</div>
+        <NavLink className="header-login" to="/login">
+          login
+        </NavLink>
+        <NavLink className="header-sign-up" to="/register">
+          sign up
+        </NavLink>
+      </div>
+    );
+  } else if (user) {
+    return (
+      <div className="header">
+        <div className="header-title">title</div>
+        <NavLink className="header-login" to="/login">
+          login
+        </NavLink>
+        <NavLink className="header-sign-up" to="/register">
+          sign up
+        </NavLink>
+        <NavLink
+          className="header-sign-up"
+          to="/login"
+          onClick={() => logout()}
+        >
+          logout
+        </NavLink>
+        <button onClick={() => logout()}>logout </button>
+        <NavLink className="header-sign-up" to="/tracking">
+          tracking
+        </NavLink>
+        <button onClick={() => console.log(user)}>props</button>
+      </div>
+    );
+  }
 };
 
-export default Header;
+const mapStateToProps = state => {
+  return { user: state.User };
+};
+
+export default connect(
+  mapStateToProps,
+  { logout }
+)(Header);
