@@ -129,6 +129,23 @@ router.get("/by_owner", async (req, res) => {
   }
 });
 
+// Get all unique owners
+router.get("/owners", async (req, res) => {
+  try {
+    const latestTimestamp = await getLatestTimestamp();
+    const result = await db.sequelize.query(
+      `SELECT DISTINCT owner FROM Newests WHERE batchTimeId="${latestTimestamp}" ORDER BY owner ASC`,
+      {
+        type: db.sequelize.QueryTypes.SELECT
+      }
+    );
+    return res.send(result);
+  } catch (err) {
+    console.log(err);
+    return res.status(500).send("Internal server error");
+  }
+});
+
 router.get("/dashboard", async (req, res) => {
   try {
     const status = await checkStatus();
@@ -138,6 +155,7 @@ router.get("/dashboard", async (req, res) => {
     result.maxQty = await getMaxQtyItems(status, limit, latestTimestamp);
     result.maxPrice = await getMostExpAuc(status, limit, latestTimestamp);
     result.maxByOwner = await getMostAucByOwner(status, limit, latestTimestamp);
+    console.log(result);
     return res.send(result);
   } catch (err) {
     console.log(err);

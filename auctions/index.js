@@ -1,14 +1,15 @@
 const express = require("express");
-const schedule = require("node-schedule");
 const app = express();
+const schedule = require("node-schedule");
 const getCurrentlyAvailData = require("./util/getCurrentlyAvailableData");
 const initStatus = require("./util/initInsertStatus");
 const bodyParser = require("body-parser");
 const auctions = require("./routes/v1/auctions");
 const users = require("./routes/v1/users");
 const headers = require("./middleware/headers");
+const auth = require("./routes/v1/auth");
 const db = require("./models");
-require("./util/yyyymmdd")();
+const port = process.env.PORT || 3000;
 
 const getCred = require("./util/getCredentials");
 
@@ -17,7 +18,9 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 // initStatus();
+db.sequelize.sync();
 
+app.use("/api/v1/auth", auth);
 app.use("/api/v1/auctions", auctions);
 app.use("/api/v1/users", users);
 
@@ -28,8 +31,8 @@ app.use("/api/v1/users", users);
 //   getCurrentlyAvailData();
 // });
 
-app.listen("3000", () => {
-  console.log("Listening in port 3000.");
+app.listen(port, () => {
+  console.log(`Listening on port ${port}`);
 });
 
 // getCred();

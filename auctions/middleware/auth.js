@@ -3,10 +3,12 @@ const env = process.env.NODE_ENV || "development";
 const config = require("../config/config.json")[env];
 
 module.exports = function(req, res, next) {
+  console.log(req.headers);
   let token =
     req.body.token ||
     req.query.token ||
     req.headers["x-access-token"] ||
+    req.headers["authorization"] ||
     req.cookies.token;
   if (token.startsWith("Bearer ")) {
     token = token.slice(7, token.length);
