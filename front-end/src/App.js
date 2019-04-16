@@ -19,6 +19,7 @@ const loginUrl = "http://localhost:3000/api/v1/users/login";
 const registerUrl = "http://localhost:3000/api/v1/users/register";
 const dashboardUrl = "http://localhost:3000/api/v1/auctions/dashboard";
 const ownersUrl = "http://localhost:3000/api/v1/auctions/owners";
+const trackUrl = "http://localhost:3000/api/v1/users/track";
 
 const App = ({ userFromStorage }) => {
   // on App mount check if user is already logged in
@@ -49,11 +50,13 @@ const App = ({ userFromStorage }) => {
           <Route
             exact
             path="/tracking"
-            render={() => (
+            render={props => (
               <UserHOC
+                {...props}
                 component={Tracking}
                 url={authUrl}
                 ownersUrl={ownersUrl}
+                trackUrl={trackUrl}
               />
             )}
           />

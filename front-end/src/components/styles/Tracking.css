@@ -1,0 +1,8 @@
+.tracking-main {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+.tracking-form {
+}
+.list-to-add {
+}

@@ -1,10 +1,11 @@
 import {
   START_LOAD_USER,
   END_LOAD_USER,
-  ERROR_LOAD_USER,
+  ERROR_USER,
   LOGIN_USER,
   LOGOUT_USER,
-  RECEIVE_TRACKING
+  RECEIVE_TRACKING,
+  REMOVE_TRACKING
 } from "../actions/userActionCreators";
 
 export default function User(state = "", action) {
@@ -20,7 +21,7 @@ export default function User(state = "", action) {
         ...state,
         loading: false
       };
-    case ERROR_LOAD_USER:
+    case ERROR_USER:
       return {
         ...state,
         loading: false,
@@ -39,6 +40,15 @@ export default function User(state = "", action) {
         ...state,
         tracking: payload
       };
+    case REMOVE_TRACKING:
+      let newTracking = state.tracking.filter(
+        o => o.owner.toLowerCase() !== payload[0].toLowerCase()
+      );
+      return {
+        ...state,
+        tracking: newTracking
+      };
+
     default:
       return state;
   }

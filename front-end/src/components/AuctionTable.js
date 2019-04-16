@@ -2,6 +2,7 @@ import React, { Fragment, useState } from "react";
 import Loader from "./Loader";
 import Auction from "./Auction";
 import "./styles/AuctionTable.css";
+import capitalize from "../helpers/capitalize";
 
 const AuctionTable = ({
   displayMode,
@@ -114,7 +115,7 @@ const AuctionTable = ({
           {loading && <Loader />}
           {auctions && (
             <Fragment>
-              <h4>Results for: {target}</h4>
+              <h4>Results for: {capitalize(target)}</h4>
               <div className="column-names">
                 <div
                   name="itemName"

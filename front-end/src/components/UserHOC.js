@@ -1,9 +1,15 @@
 import React, { useEffect, useState, Fragment } from "react";
 import { Redirect } from "react-router-dom";
 import { connect } from "react-redux";
-import { logout } from "../actions/userActionCreators";
+import { logout, userError } from "../actions/userActionCreators";
 
-const UserHOC = ({ component: Component, url, logout, ...props }) => {
+const UserHOC = ({
+  component: Component,
+  url,
+  logout,
+  userError,
+  ...props
+}) => {
   const [loading, setLoading] = useState("true");
   const [authenticated, setAuthenticated] = useState("false");
 
@@ -24,6 +30,7 @@ const UserHOC = ({ component: Component, url, logout, ...props }) => {
       } else {
         // In case of response not being status of 200, clear token and redux store of
         logout();
+        userError("You have been logged out.");
         setAuthenticated(false);
         setLoading(false);
       }
@@ -34,19 +41,21 @@ const UserHOC = ({ component: Component, url, logout, ...props }) => {
 
   useEffect(() => {
     getAuth();
+    console.log(props);
   }, []);
 
   if (loading) {
     return <div>Loading, please wait...</div>;
   }
   // If not authenticated, redirect, else return Component from props
-  if (!authenticated) return <Redirect to="/" />;
-  else
+  else if (!authenticated) return <Redirect to="/" />;
+  else if (authenticated && !loading) {
     return (
       <Fragment>
         <Component {...props} />
       </Fragment>
     );
+  }
 };
 
 const mapStateToProps = state => {
@@ -57,5 +66,5 @@ const mapStateToProps = state => {
 
 export default connect(
   mapStateToProps,
-  { logout }
+  { logout, userError }
 )(UserHOC);
