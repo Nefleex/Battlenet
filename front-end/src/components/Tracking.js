@@ -8,6 +8,8 @@ import {
 } from "../actions/userActionCreators";
 import generateId from "../helpers/generateId";
 import capitalize from "../helpers/capitalize";
+import AuctionGrid from "./AuctionGrid";
+
 import "./styles/Tracking.css";
 
 // Only render this component through UserHOC for user validation
@@ -98,8 +100,6 @@ const Tracking = ({
       setToAdd([...toAdd, { owner }]);
     };
     const revertItem = owner => {
-      console.log(owner);
-      console.log(toAdd);
       // Sort alphabetically by values
       setOwners(
         [...owners, owner].sort((a, b) => {
@@ -172,7 +172,7 @@ const Tracking = ({
             >
               Add
             </button>
-
+            <br />
             <label htmlFor="filter-to-add-input">
               Search from existing owners:
             </label>
@@ -242,26 +242,53 @@ const TrackingList = ({
   if (!tracking) {
     return <div>You have no tracked players, try adding some.</div>;
   } else {
+    const [selectedPlayer, setSelectedPlayer] = useState("");
+    const handleSelect = e => {
+      console.log(e.target.id);
+      setSelectedPlayer(e.target.id);
+      const i = tracking.findIndex(p => p.owner === e.target.id);
+      setSelectedPlayer(tracking[i]);
+    };
+    const SelectedPlayerView = ({ selectedPlayer }) => {
+      if (!selectedPlayer) return <div>Select a player</div>;
+      else if (selectedPlayer)
+        return (
+          <Fragment>
+            Currently selected player: {selectedPlayer.owner}
+            {selectedPlayer.auctions.length > 0 ? (
+              <AuctionGrid auctions={selectedPlayer.auctions} />
+            ) : (
+              <div>This player currently has no auctions posted.</div>
+            )}
+          </Fragment>
+        );
+    };
+
     return (
       <Fragment>
         <p>Tracked Players:</p>
         {tracking &&
           tracking.map(el => (
             <TrackingItem
+              id={el.owner}
               track={el}
               handleTrackDelete={handleTrackDelete}
               url={deleteUrl}
               setOwners={setOwners}
+              handleSelect={handleSelect}
             />
           ))}
+        <br />
+        <SelectedPlayerView selectedPlayer={selectedPlayer} />
+        <br />
       </Fragment>
     );
   }
 };
-const TrackingItem = ({ track, handleTrackDelete }) => {
+const TrackingItem = ({ track, handleTrackDelete, id, handleSelect }) => {
   const [toggled, setToggled] = useState(false);
   return (
-    <div key={generateId(track.owner)}>
+    <div key={generateId(track.owner)} id={id} onClick={e => handleSelect(e)}>
       {capitalize(track.owner)}: {track.auctions.length} auctions
       <button onClick={() => setToggled(!toggled)}>toggle</button>
       <button
@@ -271,17 +298,10 @@ const TrackingItem = ({ track, handleTrackDelete }) => {
       >
         delete
       </button>
-      {toggled && track.auctions.map(a => <Auction auction={a} />)}
+      {toggled && <AuctionGrid auctions={track.auctions} />}
     </div>
   );
 };
-
-const Auction = ({ auction }) => (
-  <Fragment key={generateId(auction.itemName)}>
-    <hr />
-    {auction.itemName}
-  </Fragment>
-);
 
 const Player = ({ owner, handleAddItem }) => {
   return (
