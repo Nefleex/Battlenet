@@ -1,9 +1,39 @@
 .column-names:hover {
   cursor: pointer;
 }
+.quantity,
+.item-name,
+.buyout-gold,
+.unit-cost {
+  display: flex;
+  align-items: center;
+  padding: 2px;
+}
+.gold {
+  color: gold;
+}
+.silver {
+  color: #666666;
+}
+.copper {
+  color: #803300;
+}
 
 .column-names {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+  margin-top: 20px;
   border-top: grey 1px solid;
   border-bottom: grey 1px solid;
+  padding: 2px;
+
   font-weight: bolder;
+}
+
+.column-name {
+  font-weight: bolder;
+}
+
+.auction-cell:nth-child(odd) {
+  background-color: var(--table-bg-color);
 }

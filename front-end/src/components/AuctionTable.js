@@ -26,6 +26,22 @@ const AuctionTable = ({
     return golds + silvers + coppers;
   };
 
+  const GoldSilverCopper = ({ amount }) => {
+    const coppers = amount.slice(amount.length - 2);
+    const silvers = amount.slice(amount.length - 4, amount.length - 2);
+    const golds = (amount / 10000).toFixed(0);
+    return (
+      <div>
+        {golds}
+        <span className="gold">g</span>
+        {silvers}
+        <span className="silver">s</span>
+        {coppers}
+        <span className="copper">c</span>
+      </div>
+    );
+  };
+
   const handleSorting = key => {
     console.log(key);
     console.log(sorting[key]);
@@ -61,6 +77,7 @@ const AuctionTable = ({
               <h4>Results for: {target}</h4>
               <div className="column-names">
                 <div
+                  className="column-name"
                   name="quantity"
                   onClick={e => {
                     handleSorting(e.target.getAttribute("name"));
@@ -68,8 +85,8 @@ const AuctionTable = ({
                 >
                   Quantity <SortIndicator mode={sorting.quantity} />
                 </div>
-
                 <div
+                  className="column-name"
                   name="buyout"
                   onClick={e => {
                     handleSorting(e.target.getAttribute("name"));
@@ -79,6 +96,7 @@ const AuctionTable = ({
                   <SortIndicator mode={sorting.buyout} />
                 </div>
                 <div
+                  className="column-name"
                   name="unitPrice"
                   onClick={e => {
                     handleSorting(e.target.getAttribute("name"));
@@ -97,14 +115,16 @@ const AuctionTable = ({
               const unit = toGoldSilverCopper(unitPrice);
 
               return (
-                <Fragment key={i}>
+                <div className="auction-cell" key={i}>
                   <div className="item-row" key={i}>
                     <div className="quantity">{quantity}</div>
                     <div className="buyout-gold">{total}</div>
                     <div className="unit-cost">{unit}</div>
+                    <GoldSilverCopper amount={buyout} />
+                    <GoldSilverCopper amount={unitPrice} />
                   </div>
                   <hr />
-                </Fragment>
+                </div>
               );
             })}
         </Fragment>
@@ -118,6 +138,7 @@ const AuctionTable = ({
               <h4>Results for: {capitalize(target)}</h4>
               <div className="column-names">
                 <div
+                  className="column-name"
                   name="itemName"
                   onClick={e => {
                     handleSortingAlphabetically(e.target.getAttribute("name"));
@@ -126,6 +147,7 @@ const AuctionTable = ({
                   Item Name <SortIndicator mode={sorting.itemName} />
                 </div>
                 <div
+                  className="column-name"
                   name="quantity"
                   onClick={e => {
                     handleSorting(e.target.getAttribute("name"));
@@ -135,6 +157,7 @@ const AuctionTable = ({
                 </div>
 
                 <div
+                  className="column-name"
                   name="buyout"
                   onClick={e => {
                     handleSorting(e.target.getAttribute("name"));
@@ -143,6 +166,7 @@ const AuctionTable = ({
                   Buyout <SortIndicator mode={sorting.buyout} />
                 </div>
                 <div
+                  className="column-name"
                   name="unitPrice"
                   onClick={e => {
                     handleSorting(e.target.getAttribute("name"));
@@ -156,45 +180,23 @@ const AuctionTable = ({
 
           {auctions &&
             auctions.map((auction, i) => {
-              const {
-                quantity,
-                buyout,
-                unitPrice,
-                itemName,
-                ...rest
-              } = auction;
+              const { quantity, buyout, unitPrice, itemName } = auction;
               const total = toGoldSilverCopper(buyout);
               const unit = toGoldSilverCopper(unitPrice);
+              console.log(total);
 
               return (
-                <Fragment key={i}>
-                  {/* <div
-                      id={i}
-                      className="item-name"
-                      onMouseOver={e => {
-                        console.log(auction);
-                      }}
-                      onMouseEnter={() => setTooltip(itemName)}
-                      onMouseLeave={() => setTooltip(null)}
-                    >
+                <div className="auction-cell" key={i}>
+                  <div className="item-row" key={i}>
+                    <div id={i} className="item-name">
                       {itemName}
                     </div>
                     <div className="quantity">{quantity}</div>
-                    <div className="total">{buyout}</div>
                     <div className="buyout-gold">{total}</div>
-                    <div className="unit-cost">{unit}</div> */}
-                  <Auction
-                    key={i}
-                    itemName={itemName}
-                    quantity={quantity}
-                    buyout={buyout}
-                    total={total}
-                    unit={unit}
-                    rest={rest}
-                  />
-
+                    <div className="unit-cost">{unit}</div>
+                  </div>
                   <hr />
-                </Fragment>
+                </div>
               );
             })}
         </Fragment>
