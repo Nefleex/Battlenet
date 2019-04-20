@@ -7,6 +7,7 @@ const jwt = require("jsonwebtoken");
 const env = process.env.NODE_ENV || "development";
 const config = require("../../config/config.json")[env];
 const auth = require("../../middleware/auth");
+const getLatestTimestamp = require("../../util/getLatestTimestamp");
 
 const retrieveItemInfo = async val => {
   const result = await db.Item.find({
@@ -201,33 +202,55 @@ router.delete("/track", auth, async (req, res) => {
     const { username, id } = req.decoded.payload;
     const { data } = req.body;
     if (data.length === 0) return res.send("No data to delete");
-    // Await until all Tracks are destroyed before finding remaining ones and sending them as a response.
     const deleted = [];
-    await Promise.all(
-      data.map(async d => {
-        const deletedItem = await db.Track.destroy({
-          where: {
-            owner: d,
-            UserId: id
-          }
-        });
-        // If item was destroyed, promise resolves to 1, else 0. Track which Tracks were destroyed
-        if (deletedItem === 1) deleted.push(d);
-      })
-    );
-    console.log(deleted);
+    // If incoming data is array, map destroy
+    if (Array.isArray(data)) {
+      // Await until all Tracks are destroyed before finding remaining ones and sending them as a response.
 
-    const tracking = await db.Track.findAll({
-      where: {
-        UserId: id
-      },
-      raw: true
-    });
-    const owners = tracking.map(item => {
-      console.log(item);
-      return item.owner;
-    });
-    return res.send({ deleted, owners });
+      await Promise.all(
+        data.map(async d => {
+          const deletedItem = await db.Track.destroy({
+            where: {
+              owner: d,
+              UserId: id
+            }
+          });
+          // If item was destroyed, promise resolves to 1, else 0. Track which Tracks were destroyed
+          if (deletedItem === 1) deleted.push(d);
+        })
+      );
+      console.log(deleted);
+    } else if (typeof data === "string") {
+      const deletedItem = await db.Track.destroy({
+        where: {
+          owner: data,
+          UserId: id
+        }
+      });
+      if (deletedItem === 1) deleted.push(data);
+    }
+
+    // const tracking = await db.Track.findAll({
+    //   where: {
+    //     UserId: id
+    //   },
+    //   raw: true
+    // });
+    // const owners = tracking.map(item => {
+    //   console.log(item);
+    //   return item.owner;
+    // });
+    //
+
+    const latestTimestamp = await getLatestTimestamp();
+    const remainingOwners = await db.sequelize.query(
+      `SELECT DISTINCT owner FROM Newests WHERE batchTimeId="${latestTimestamp}" ORDER BY owner ASC`,
+      {
+        type: db.sequelize.QueryTypes.SELECT
+      }
+    );
+
+    return res.send({ deleted, owners: remainingOwners });
   } catch (err) {
     console.log("Error:");
     console.log(err);
@@ -262,7 +285,22 @@ router.get("/track/auctions", auth, async (req, res) => {
         const auctions = await Promise.all(
           ownerAuctions.map(async auction => {
             const itemInfo = await retrieveItemInfo(auction.itemId);
-            return { ...auction, itemName: itemInfo.name, data: itemInfo };
+            if (!itemInfo) {
+              return {
+                ...auction,
+                itemName: `Item id: ${auction.itemId}`,
+                data: { 404: "Item not in database" }
+              };
+            }
+            let unitPrice = Math.trunc(
+              auction.buyout / auction.quantity
+            ).toString();
+            return {
+              ...auction,
+              unitPrice,
+              itemName: itemInfo.name,
+              data: itemInfo
+            };
           })
         );
 

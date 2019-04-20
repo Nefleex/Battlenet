@@ -18,7 +18,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 // initStatus();
-db.sequelize.sync();
+// db.sequelize.sync();
 
 app.use("/api/v1/auth", auth);
 app.use("/api/v1/auctions", auctions);

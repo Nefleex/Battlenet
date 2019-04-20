@@ -72,7 +72,8 @@ router.get("/by_item", async (req, res) => {
       let unitPrice = Math.trunc(auction.buyout / auction.quantity).toString();
       return { ...auction, unitPrice };
     });
-    if (!resultFinal || resultFinal === 0) {
+    console.log(resultFinal);
+    if (!resultFinal || resultFinal === 0 || !resultFinal.length > 0) {
       return res.status(404).send("No results for that item");
     } else {
       return res.json({ auctions: resultFinal, extra: resultName });

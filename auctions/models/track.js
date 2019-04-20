@@ -7,7 +7,7 @@ module.exports = (sequelize, DataTypes) => {
       primaryKey: true,
       type: DataTypes.INTEGER
     },
-    owner: { type: DataTypes.STRING, unique: true }
+    owner: { type: DataTypes.STRING, allowNull: false, unique: true }
   });
   Track.associate = function(models) {
     // associations can be defined here

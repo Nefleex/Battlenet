@@ -25,7 +25,7 @@ module.exports = async (status, limit, latestTimestamp) => {
     } else {
       if (!limit) {
         maxItems = await db.sequelize.query(
-          `SELECT a.itemId, sum(a.quantity) as quantity, i.name FROM StandBys AS a, Items AS i WHERE batchTimeId="${latestTimestamp}" and a.itemId=i.id GROUP BY a.itemId ORDER BY quantity DESC`,
+          `SELECT a.itemId, sum(a.quantity) as quantity, i.name FROM StandBies AS a, Items AS i WHERE batchTimeId="${latestTimestamp}" and a.itemId=i.id GROUP BY a.itemId ORDER BY quantity DESC`,
           {
             type: db.sequelize.QueryTypes.SELECT
           }
@@ -33,7 +33,7 @@ module.exports = async (status, limit, latestTimestamp) => {
         return maxItems;
       } else if (limit) {
         maxItems = await db.sequelize.query(
-          `SELECT a.itemId, SUM(a.quantity) as quantity, i.name FROM StandBys AS a, Items AS i WHERE batchTimeId="${latestTimestamp}" and a.itemId=i.id GROUP BY a.itemId ORDER BY quantity DESC LIMIT ${limit}`,
+          `SELECT a.itemId, SUM(a.quantity) as quantity, i.name FROM StandBies AS a, Items AS i WHERE batchTimeId="${latestTimestamp}" and a.itemId=i.id GROUP BY a.itemId ORDER BY quantity DESC LIMIT ${limit}`,
           {
             type: db.sequelize.QueryTypes.SELECT
           }
