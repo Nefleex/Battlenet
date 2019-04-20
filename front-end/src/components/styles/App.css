@@ -1,0 +1,18 @@
+/* 
+Css Variables linked to root element id="app"
+*/
+* {
+  box-sizing: border-box;
+  margin: 0;
+}
+body {
+  background: var(--main-bg-color-light);
+}
+
+:root {
+  --main-bg-color: #3f3838;
+  --main-bg-color-light: #fff2e6;
+  --main-text-color: #ffdf00;
+  --main-font: "Dosis", sans-serif;
+  --table-bg-color: #ffe6b3;
+}

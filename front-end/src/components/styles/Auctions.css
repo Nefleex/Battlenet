@@ -1,9 +1,3 @@
-:root {
-  --main-bg-color: #3f3838;
-  --main-text-color: #ffdf00;
-  --main-font: "Dosis", sans-serif;
-}
-
 .item-row,
 .column-names,
 .sort-by,
@@ -14,10 +8,6 @@
 }
 
 .item-row {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
-}
-.column-names {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
 }
