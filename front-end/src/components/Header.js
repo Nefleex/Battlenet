@@ -31,18 +31,12 @@ const Header = props => {
         <NavLink className="header-sign-up" to="/register">
           sign up
         </NavLink>
-        <NavLink
-          className="header-sign-up"
-          to="/login"
-          onClick={() => logout()}
-        >
+        <NavLink className="header-logout" to="/login" onClick={() => logout()}>
           logout
         </NavLink>
-        <button onClick={() => logout()}>logout </button>
-        <NavLink className="header-sign-up" to="/tracking">
-          tracking
+        <NavLink className="header-tracking" exact to="/tracking">
+          TRACKING
         </NavLink>
-        <button onClick={() => console.log(user)}>props</button>
       </div>
     );
   }
