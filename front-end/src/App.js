@@ -9,10 +9,8 @@ import Dashboard from "./components/Dashboard";
 import Login from "./components/Login";
 import Register from "./components/Register";
 import Tracking from "./components/Tracking";
-
-const Home = () => {
-  return <div>Home</div>;
-};
+import Home from "./components/Home";
+import "./components/styles/App.css";
 
 const authUrl = "http://localhost:3000/api/v1/auth";
 const loginUrl = "http://localhost:3000/api/v1/users/login";
