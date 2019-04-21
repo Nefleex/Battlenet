@@ -48,7 +48,7 @@ const UserHOC = ({
     return <div>Loading, please wait...</div>;
   }
   // If not authenticated, redirect, else return Component from props
-  else if (!authenticated) return <Redirect to="/" />;
+  else if (!authenticated) return <Redirect to="/expired" />;
   else if (authenticated && !loading) {
     return (
       <Fragment>

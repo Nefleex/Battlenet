@@ -10,6 +10,7 @@ import Login from "./components/Login";
 import Register from "./components/Register";
 import Tracking from "./components/Tracking";
 import Home from "./components/Home";
+import Expired from "./components/Expired";
 import "./components/styles/App.css";
 
 const authUrl = "http://localhost:3000/api/v1/auth";
@@ -39,6 +40,7 @@ const App = ({ userFromStorage }) => {
         <Layout />
         <Switch>
           <Route exact path="/" component={Home} />
+          <Route exact path="/expired" component={Expired} />
           <Route
             exact
             path="/dashboard"
