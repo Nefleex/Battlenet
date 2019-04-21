@@ -85,7 +85,7 @@ router.post("/login", async (req, res) => {
           }
         },
         secret,
-        { expiresIn: "10000" } // Access with this token is enabled for 24 hours. There is currently no way to revoke token.
+        { expiresIn: "24h" } // Access with this token is enabled for 24 hours. There is currently no way to revoke token.
       );
       return res.json({
         token,
