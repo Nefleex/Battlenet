@@ -41,8 +41,7 @@ router.post("/register", async (req, res) => {
       const creation = await db.User.create({
         username,
         password: hashedPassword
-      });
-      //User created with password hashed
+      }); //User created with password hashed
 
       const plain = creation.get({ plain: true });
       const user = { username: plain.username, password: plain.password };
@@ -77,18 +76,16 @@ router.post("/login", async (req, res) => {
 
     const match = await bcrypt.compare(password, result.password);
     if (match) {
-      // Add token here
       const secret = config.jwt_secret;
       const token = jwt.sign(
         {
           payload: {
             id: result.id,
-            username: result.username,
-            tracked: "FETCH USERS TRACKED OWNERS AND ITEMS HERE"
+            username: result.username
           }
         },
         secret,
-        { expiresIn: "2h" }
+        { expiresIn: "24h" } // Access with this token is enabled for 24 hours. There is currently no way to revoke token.
       );
       return res.json({
         token,
@@ -114,10 +111,8 @@ router.post("/track", auth, async (req, res) => {
 
     const { username, id } = req.decoded.payload;
     const { data } = req.body;
-    console.log(Array.isArray(data));
     if (!Array.isArray(data)) {
       const result = await db.Track.create({ UserId: id, owner: data });
-      console.log(result);
       if (result) {
         res.status(201).send(`You are now tracking ${result.owner}`);
       } else {
@@ -140,9 +135,7 @@ router.post("/track", auth, async (req, res) => {
         const owners = data.map(o => {
           return { owner: o, UserId: id };
         });
-        console.log(owners);
         const result = await db.Track.bulkCreate(owners);
-        console.log(result);
         const created = result.map(r => r.owner);
         return res.json({
           msg: `You are now tracking: ${created.map(c => c)}`,
@@ -215,11 +208,10 @@ router.delete("/track", auth, async (req, res) => {
               UserId: id
             }
           });
-          // If item was destroyed, promise resolves to 1, else 0. Track which Tracks were destroyed
+          // If item was destroyed, promise resolves to 1, else 0. Keep trakc of which Tracks were destroyed
           if (deletedItem === 1) deleted.push(d);
         })
       );
-      console.log(deleted);
     } else if (typeof data === "string") {
       const deletedItem = await db.Track.destroy({
         where: {
@@ -229,18 +221,6 @@ router.delete("/track", auth, async (req, res) => {
       });
       if (deletedItem === 1) deleted.push(data);
     }
-
-    // const tracking = await db.Track.findAll({
-    //   where: {
-    //     UserId: id
-    //   },
-    //   raw: true
-    // });
-    // const owners = tracking.map(item => {
-    //   console.log(item);
-    //   return item.owner;
-    // });
-    //
 
     const latestTimestamp = await getLatestTimestamp();
     const remainingOwners = await db.sequelize.query(
@@ -266,13 +246,11 @@ router.get("/track/auctions", auth, async (req, res) => {
       where: { UserId: id },
       raw: true
     });
-    console.log(userData);
 
     // Map owners into array
     const owners = userData.map(o => {
       return o.owner;
     });
-    console.log(owners);
 
     // Find auction entries for each owner
     const tracked = Promise.all(
@@ -308,13 +286,7 @@ router.get("/track/auctions", auth, async (req, res) => {
       })
     );
     const result = await tracked;
-    // const result = raw.filter(el => {
-    //   if (el === null) {
-    //     return false;
-    //   } else {
-    //     return true;
-    //   }
-    // });
+
     if (result.length === 0) {
       return res.status(404).send(result);
     }
