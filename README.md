@@ -14,7 +14,7 @@ Node.js application that periodically checks Blizzard Battle.net API auction dum
 ##### Database:
 Mysql with sequelize.js ORM.
 ##### Server:
-Your run-of-the-mill express server. Routes for user(account management),auth(authentication) and auctions(serving http requests from the front end UI)
+Your run-of-the-mill express server. Routes for user(account management),auth(authentication) and auctions(serving http requests from the front end UI). Authentication is done with jsonwebtoken package. Since this application requires no sensitive information, there is no implementation of revoking tokens. Once user has been logged in, issued token can be used to access resources that require authentication for **24 hours**. 
 
 #### UI "front-end":
 Create-react-app application with react-router v4, redux, react-redux and redux-thunk.
