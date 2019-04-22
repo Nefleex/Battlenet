@@ -10,7 +10,7 @@
   padding: 2px;
 }
 .gold {
-  color: gold;
+  color: #967907;
 }
 .silver {
   color: #666666;
@@ -22,8 +22,6 @@
 .column-names {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
-  margin-top: 20px;
-  border-top: grey 1px solid;
   border-bottom: grey 1px solid;
   padding: 2px;
 

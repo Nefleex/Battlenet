@@ -16,3 +16,9 @@ body {
   --main-font: "Dosis", sans-serif;
   --table-bg-color: #ffe6b3;
 }
+
+/* Generalized centering class*/
+.centered {
+  width: 90%;
+  margin: 0 auto;
+}

@@ -3,7 +3,7 @@ import { BrowserRouter, Route, Switch, Link } from "react-router-dom";
 import { connect } from "react-redux";
 import { userFromStorage } from "./actions/userActionCreators";
 import UserHOC from "./components/UserHOC";
-import Layout from "./components/Layout";
+import Header from "./components/Header";
 import Auctions from "./components/Auctions";
 import Dashboard from "./components/Dashboard";
 import Login from "./components/Login";
@@ -37,7 +37,7 @@ const App = ({ userFromStorage }) => {
   return (
     <BrowserRouter>
       <Fragment>
-        <Layout />
+        <Header />
         <Switch>
           <Route exact path="/" component={Home} />
           <Route exact path="/expired" component={Expired} />

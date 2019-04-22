@@ -1,25 +1,40 @@
+*:visited {
+  color: inherit;
+}
+
 .header {
   width: 100%;
   border: 1px solid white;
   display: grid;
-  grid-template-columns: repeat(12, 1fr);
+  grid-template-columns: 120px auto auto;
   background-color: var(--main-bg-color);
   color: var(--main-text-color);
   font-family: var(--main-font);
   font-weight: bolder;
   letter-spacing: 3px;
+  height: 50px;
 }
 .header-active {
   color: red;
 }
+.header-nav {
+  margin-left: 20px;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+}
+.header-title-items {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+}
 
 .header-title {
-  grid-column: 2/3;
+  font-size: 120%;
 }
 
 .header-login {
   font-family: var(--main-font);
-  grid-column: 8/9;
   display: inline-block;
   border: none;
   text-decoration: none;
@@ -27,11 +42,13 @@
   background-color: var(--main-bg-color);
   text-align: center;
   cursor: pointer;
+  border: 1px var(--main-text-color) solid;
+  padding: 5px;
+  border-radius: 3px;
 }
 
 .header-sign-up {
   font-family: var(--main-font);
-  grid-column: 9/10;
   display: inline-block;
   border: none;
   text-decoration: none;
@@ -39,11 +56,13 @@
   background-color: var(--main-bg-color);
   text-align: center;
   cursor: pointer;
+  border: 1px var(--main-text-color) solid;
+  padding: 5px;
+  border-radius: 3px;
 }
 
 .header-tracking {
   font-family: var(--main-font);
-  grid-column: 10/11;
   display: inline-block;
   border: none;
   text-decoration: none;
@@ -51,18 +70,43 @@
   background-color: var(--main-bg-color);
   text-align: center;
   cursor: pointer;
+  font-size: 120%;
+}
+.header-about {
+  font-family: var(--main-font);
+  display: inline-block;
+  border: none;
+  text-decoration: none;
+  color: var(--main-text-color);
+  background-color: var(--main-bg-color);
+  text-align: center;
+  cursor: pointer;
+  font-size: 120%;
 }
 
 .header-logout {
   font-family: var(--main-font);
   grid-column: 11/12;
   display: inline-block;
-  border: none;
   text-decoration: none;
   color: var(--main-text-color);
   background-color: var(--main-bg-color);
   text-align: center;
   cursor: pointer;
+  border: 1px var(--main-text-color) solid;
+  padding: 5px;
+  border-radius: 3px;
+}
+.header-logo {
+  margin-left: 20px;
+  width: 30px;
+}
+
+.user-actions {
+  display: flex;
+  align-items: center;
+  justify-self: end;
+  margin-right: 10px;
 }
 .header-sign-up:focus {
   outline: 0;
@@ -79,8 +123,17 @@
   text-decoration: underline;
 }
 
-.header-owner {
-}
-
-.header-auction {
+.header-dashboard,
+.header-auctions,
+.header-tracking,
+.header-home {
+  font-family: var(--main-font);
+  display: inline-block;
+  border: none;
+  text-decoration: none;
+  color: var(--main-text-color);
+  background-color: var(--main-bg-color);
+  text-align: center;
+  cursor: pointer;
+  font-size: 120%;
 }

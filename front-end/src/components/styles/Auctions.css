@@ -24,6 +24,8 @@
   width: 90%;
   margin: 0 auto;
   margin-top: 20px;
+  font-family: var(--main-font);
+  padding: 10px;
 }
 
 .search-button {

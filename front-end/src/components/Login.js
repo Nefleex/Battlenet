@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { connect } from "react-redux";
 import { login, logout } from "../actions/userActionCreators";
+import "./styles/Login.css";
 
 const Login = ({ url, login, logout }) => {
   const [username, setUsername] = useState("");
@@ -51,6 +52,7 @@ const Login = ({ url, login, logout }) => {
         value={username}
         onChange={e => handleChangeUsername(e)}
       />
+      <br />
       <label htmlFor="passwprd">Password</label>
       <input
         name="password"
@@ -60,6 +62,7 @@ const Login = ({ url, login, logout }) => {
         value={password}
         onChange={e => handleChangePassword(e)}
       />
+      <br />
       <button type="button" onClick={() => login(username, password, url)}>
         Login
       </button>

@@ -56,6 +56,11 @@ const Home = () => {
               Sort your search results in ascending or descending order by
               clicking on the column name.
             </li>
+            <li>
+              In the event of error you should receive an error message. For
+              example if nothing with your keyword was found, you will receive
+              message{" "}
+            </li>
           </ul>
         </li>
       </ul>

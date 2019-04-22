@@ -1,6 +1,5 @@
 import React, { Fragment, useState } from "react";
 import Loader from "./Loader";
-import Auction from "./Auction";
 import "./styles/AuctionTable.css";
 import capitalize from "../helpers/capitalize";
 
@@ -118,8 +117,7 @@ const AuctionTable = ({
                 <div className="auction-cell" key={i}>
                   <div className="item-row" key={i}>
                     <div className="quantity">{quantity}</div>
-                    <div className="buyout-gold">{total}</div>
-                    <div className="unit-cost">{unit}</div>
+
                     <GoldSilverCopper amount={buyout} />
                     <GoldSilverCopper amount={unitPrice} />
                   </div>
@@ -183,7 +181,6 @@ const AuctionTable = ({
               const { quantity, buyout, unitPrice, itemName } = auction;
               const total = toGoldSilverCopper(buyout);
               const unit = toGoldSilverCopper(unitPrice);
-              console.log(total);
 
               return (
                 <div className="auction-cell" key={i}>

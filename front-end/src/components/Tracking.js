@@ -139,14 +139,16 @@ const Tracking = ({
       setUntouched(true); // set field status to untouched so duplicates get removed on next focus
     };
 
-    return (
-      <div>
-        <hr />
-        <button onClick={() => console.log(ogOwners)}>log ogOwners</button>
-        <button onClick={() => console.log(owners)}>log owners </button>
-        <button onClick={() => console.log(toAdd)}>log toAdd </button>
+    const handlePostAddList = () => {
+      postTracking(trackUrl, toAdd);
+      setToAdd([]);
+      setSearch("");
+      setSearchResults([]);
+    };
 
-        <section className="tracking-main">
+    return (
+      <div className="tracking-main">
+        <section className="tracking-first-section">
           <form
             action="#"
             className="tracking-form"
@@ -203,23 +205,13 @@ const Tracking = ({
               })}
           </form>
           <div className="list-to-add">
-            list to add
             <AddList
               toAdd={toAdd}
               clearAll={clearAll}
               revertItem={revertItem}
               deleteTracking={deleteTracking}
+              handlePost={handlePostAddList}
             />
-            <button
-              onClick={() => {
-                postTracking(trackUrl, toAdd);
-                setToAdd([]);
-                setSearch("");
-                setSearchResults([]);
-              }}
-            >
-              ADD TO TRACKING HERE
-            </button>
           </div>
         </section>
         <br />
@@ -253,14 +245,14 @@ const TrackingList = ({
       if (!selectedPlayer) return <div>Select a player</div>;
       else if (selectedPlayer)
         return (
-          <Fragment>
+          <div>
             Currently selected player: {selectedPlayer.owner}
             {selectedPlayer.auctions.length > 0 ? (
               <AuctionGrid auctions={selectedPlayer.auctions} />
             ) : (
               <div>This player currently has no auctions posted.</div>
             )}
-          </Fragment>
+          </div>
         );
     };
 
@@ -288,7 +280,12 @@ const TrackingList = ({
 const TrackingItem = ({ track, handleTrackDelete, id, handleSelect }) => {
   const [toggled, setToggled] = useState(false);
   return (
-    <div key={generateId(track.owner)} id={id} onClick={e => handleSelect(e)}>
+    <div
+      className="tracking-item"
+      key={generateId(track.owner)}
+      id={id}
+      onClick={e => handleSelect(e)}
+    >
       {capitalize(track.owner)}: {track.auctions.length} auctions
       <button onClick={() => setToggled(!toggled)}>toggle</button>
       <button
@@ -312,17 +309,8 @@ const Player = ({ owner, handleAddItem }) => {
     </Fragment>
   );
 };
-const ListButtons = ({ toAdd, clearAll, postTracking }) => {
-  if (toAdd.length > 0) {
-    return (
-      <Fragment>
-        <button onClick={() => clearAll(toAdd)}>clear</button>
-        <button onClick={() => postTracking}>Add to Tracking</button>
-      </Fragment>
-    );
-  } else return null;
-};
-const AddList = ({ toAdd, clearAll, revertItem, postTracking }) => {
+
+const AddList = ({ toAdd, clearAll, revertItem, handlePost }) => {
   return (
     <Fragment>
       {toAdd &&
@@ -333,11 +321,12 @@ const AddList = ({ toAdd, clearAll, revertItem, postTracking }) => {
             revertItem={revertItem}
           />
         ))}
-      <ListButtons
-        toAdd={toAdd}
-        clearAll={clearAll}
-        postTracking={postTracking}
-      />
+      {toAdd.length > 0 && (
+        <Fragment>
+          <button onClick={() => clearAll(toAdd)}>clear</button>
+          <button onClick={() => handlePost()}>Add to Tracking</button>
+        </Fragment>
+      )}
     </Fragment>
   );
 };
